@@ -1,0 +1,1345 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Último Ônibus · Pré-venda aberta</title>
+<meta name="description" content="Último Ônibus: um mistério em pixel art sobre a linha 0000, que só roda depois da meia-noite. Lançamento em 13.03.2027. Pré-venda aberta.">
+<meta name="theme-color" content="#121834">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='6' fill='%23121834'/%3E%3Cpath d='M4 8h24v5a3 3 0 0 0 0 6v5H4v-5a3 3 0 0 0 0-6z' fill='%23F49DB0'/%3E%3C/svg%3E">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Archivo:wdth,wght@62..125,100..900&family=Courier+Prime:wght@400;700&family=Pixelify+Sans:wght@400..700&display=swap" rel="stylesheet">
+<style>
+:root{
+  --bilhete:#F49DB0;
+  --bilhete-claro:#F8BDCA;
+  --bilhete-escuro:#E58A9F;
+  --tinta:#0E4D4A;
+  --preto:#151314;
+  --texto-2:#5A2A38;
+  --carimbo:#BF1520;
+  --noite:#121834;
+  --noite-2:#0B1026;
+  --noite-texto:#F9CBD5;
+  --tecido:#141A38;
+  --tecido-img:none;
+  --guilhoche-faixa:none;
+  --f-display:'Archivo','Arial Narrow',sans-serif;
+  --f-num:'Courier Prime','Courier New',monospace;
+  --f-pixel:'Pixelify Sans',monospace;
+  --raio:14px;
+  --gutter:clamp(20px,4.4vw,56px);
+  --grao:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='220' height='220'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.85' numOctaves='2' stitchTiles='stitch'/%3E%3CfeColorMatrix values='0 0 0 0 .35 0 0 0 0 .05 0 0 0 0 .12 0 0 0 .11 0'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+  --desgaste:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='160' height='160'%3E%3Cfilter id='d'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.55' numOctaves='3' seed='4'/%3E%3CfeColorMatrix values='0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 -2.6 2.15'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23d)'/%3E%3C/svg%3E");
+}
+*,*::before,*::after{box-sizing:border-box}
+[hidden]{display:none!important}
+html{
+  scroll-behavior:smooth;
+  scroll-padding-top:84px;
+  background:var(--tecido);
+  scrollbar-color:var(--bilhete) var(--noite-2);
+}
+body{
+  margin:0;
+  background:var(--tecido-img) var(--tecido) fixed;
+  color:var(--preto);
+  font-family:var(--f-display);
+  font-size:1.0625rem;
+  line-height:1.55;
+  -webkit-font-smoothing:antialiased;
+  text-rendering:optimizeLegibility;
+}
+::selection{background:var(--preto);color:var(--bilhete)}
+html,body{overflow-x:clip}
+a,button,label{-webkit-tap-highlight-color:transparent}
+img,svg,canvas{display:block;max-width:100%}
+a{color:inherit;text-underline-offset:.22em;text-decoration-thickness:1.5px}
+:focus-visible{outline:3px solid var(--tinta);outline-offset:3px;border-radius:4px}
+.sr-only{position:absolute!important;width:1px;height:1px;padding:0;margin:-1px;overflow:hidden;clip:rect(0 0 0 0);white-space:nowrap;border:0}
+.pular{position:absolute;left:12px;top:-60px;z-index:50;background:var(--bilhete);color:var(--preto);padding:10px 16px;border-radius:6px;font-weight:800}
+.pular:focus{top:12px}
+.serial{font-family:var(--f-num);font-weight:700;letter-spacing:.05em;font-variant-numeric:tabular-nums}
+.icone{width:1.1em;height:1.1em;flex:none}
+
+/* ---------- barra da noite ---------- */
+.nav{
+  position:sticky;top:0;z-index:30;
+  display:flex;align-items:center;gap:28px;
+  min-height:62px;padding:9px var(--gutter);
+  background:var(--noite);color:var(--noite-texto);
+  border-bottom:1px solid rgba(244,157,176,.16);
+}
+.nav :focus-visible{outline-color:var(--bilhete)}
+.nav__marca{
+  display:flex;align-items:center;gap:10px;flex:none;
+  color:var(--bilhete);text-decoration:none;
+  font-weight:900;font-stretch:66%;font-size:1.35rem;line-height:1;
+  text-transform:uppercase;letter-spacing:.01em;
+}
+.nav__marca svg{width:30px;height:21px}
+.nav__links{display:flex;gap:24px;list-style:none;margin:0 0 0 auto;padding:0}
+.nav__links a{
+  display:block;padding:6px 0;
+  color:var(--noite-texto);text-decoration:none;
+  font-weight:600;font-stretch:85%;font-size:.95rem;
+  border-bottom:2px solid transparent;
+  transition:border-color .2s ease-out,color .2s ease-out;
+}
+@media (hover:hover){.nav__links a:hover{border-bottom-color:var(--bilhete);color:#fff}}
+.nav__partida{display:flex;flex-direction:column;align-items:flex-end;line-height:1.1;flex:none}
+.nav__partida span{font-weight:700;font-stretch:80%;font-size:.72rem;letter-spacing:.05em;text-transform:uppercase;opacity:.72}
+.nav__partida time{font-family:var(--f-num);font-weight:700;font-size:1rem;letter-spacing:.04em;color:var(--bilhete)}
+
+/* ---------- botões ---------- */
+.botao{
+  --bg:var(--preto);--fg:var(--bilhete);--notch:var(--bilhete);
+  position:relative;
+  display:inline-flex;align-items:center;justify-content:center;gap:10px;
+  min-height:50px;padding:14px 28px;
+  background:var(--bg);color:var(--fg);
+  font:800 1.05rem/1 var(--f-display);font-stretch:72%;
+  letter-spacing:.04em;text-transform:uppercase;text-decoration:none;
+  border:0;border-radius:6px;cursor:pointer;
+  transition:background-color .18s ease-out,transform .12s ease-out;
+}
+.botao::before,.botao::after{
+  content:"";position:absolute;top:50%;
+  width:12px;height:12px;margin-top:-6px;border-radius:50%;
+  background:var(--notch);
+}
+.botao::before{left:-6px}
+.botao::after{right:-6px}
+@media (hover:hover){.botao:hover{--bg:var(--tinta)}}
+.botao:active{transform:translateY(1px)}
+.botao--claro{--bg:var(--bilhete);--fg:var(--preto);--notch:var(--noite)}
+@media (hover:hover){.botao--claro:hover{--bg:#fff;--fg:var(--preto)}}
+.botao[disabled]{cursor:default}
+.botao[data-estado="carregando"]{cursor:progress;--bg:#3b2a30}
+.botao[data-estado="validado"]{--bg:var(--tinta);--fg:#fff}
+.botao[data-estado="validado"]:hover{--bg:var(--tinta)}
+.nav .botao{min-height:42px;padding:10px 20px;font-size:.95rem;flex:none}
+.nav .botao .curto{display:none}
+
+.link-seta{
+  display:inline-flex;align-items:center;gap:8px;
+  font-weight:800;font-stretch:78%;text-transform:uppercase;letter-spacing:.04em;font-size:.95rem;
+  text-decoration:none;border-bottom:2px solid currentColor;padding-bottom:2px;width:max-content;
+}
+.link-seta svg{transition:transform .2s ease-out}
+@media (hover:hover){.link-seta:hover svg{transform:translateX(3px)}}
+
+/* ---------- o bilhete ---------- */
+.bilhete{
+  position:relative;
+  max-width:1240px;margin:26px auto 80px;
+  border-radius:var(--raio);
+  box-shadow:0 2px 3px rgba(0,0,0,.35),0 30px 70px -14px rgba(0,0,0,.65);
+}
+.via{
+  position:relative;overflow:hidden;
+  padding:clamp(44px,6vw,76px) var(--gutter);
+  background:var(--grao),var(--bilhete);
+}
+.bilhete > .via:first-child{border-radius:var(--raio) var(--raio) 0 0}
+.bilhete > .via:last-child{border-radius:0 0 var(--raio) var(--raio)}
+.picote{position:relative;height:0;z-index:3}
+.picote::before{content:"";position:absolute;left:24px;right:24px;top:-2px;border-top:4px dotted var(--tecido)}
+.picote i{
+  position:absolute;top:-15px;width:30px;height:30px;border-radius:50%;
+  background:var(--tecido-img) var(--tecido) fixed;
+}
+.picote i:first-child{left:-15px}
+.picote i:last-child{right:-15px}
+.via__serie{
+  position:absolute;right:16px;top:50%;margin:0;
+  transform:translateY(-50%) rotate(180deg);writing-mode:vertical-rl;
+  font-size:.72rem;color:var(--texto-2);opacity:.8;
+}
+.faixa{height:22px;background:var(--guilhoche-faixa) repeat-x left center;opacity:.78}
+.roseta{position:absolute;color:var(--tinta);pointer-events:none;opacity:.42}
+.roseta svg{width:100%;height:100%}
+
+.via__cabeca{
+  position:relative;z-index:1;
+  display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1fr);
+  gap:18px 48px;align-items:end;margin-bottom:44px;
+}
+.via__cabeca h2{
+  margin:0;
+  font-size:clamp(3rem,6.4vw,5.6rem);font-weight:900;font-stretch:62%;
+  line-height:.86;letter-spacing:-.005em;text-transform:uppercase;
+}
+.via__cabeca p{margin:0;max-width:44ch;justify-self:end;font-size:1.125rem;line-height:1.5;color:var(--texto-2);text-wrap:pretty}
+
+/* ---------- capa ---------- */
+.capa{display:grid;grid-template-columns:minmax(0,1fr) 300px;padding:0}
+.capa__corpo{position:relative;padding:0 44px 46px;container-type:inline-size}
+.capa__corpo > .faixa{margin:0 -44px 18px}
+.capa__corpo .roseta{width:600px;height:600px;right:-170px;top:-160px}
+.capa__topo{
+  position:relative;z-index:1;
+  display:flex;flex-wrap:wrap;justify-content:space-between;gap:6px 18px;
+  padding-bottom:12px;border-bottom:1.5px solid var(--preto);
+  font-weight:700;font-stretch:80%;font-size:.78rem;letter-spacing:.05em;text-transform:uppercase;
+}
+.capa__topo .serial{font-size:.92rem;letter-spacing:.06em}
+.capa__titulo{
+  position:relative;z-index:1;
+  margin:22px 0 22px;padding-top:.09em;
+  font-size:18.2cqi;font-weight:900;font-stretch:62%;
+  line-height:.84;letter-spacing:-.01em;text-transform:uppercase;white-space:nowrap;
+}
+.capa__titulo span{display:inline-block}
+.capa__grade{position:relative;z-index:1;display:grid;grid-template-columns:minmax(0,.92fr) minmax(0,1.3fr);gap:34px;align-items:start}
+.linha{display:flex;align-items:stretch;width:max-content;max-width:100%;border:2px solid var(--preto);border-radius:4px;background:var(--bilhete)}
+.linha__num{flex:none;white-space:nowrap;padding:7px 12px;background:var(--preto);color:var(--bilhete);font-family:var(--f-num);font-weight:700;font-size:1.3rem;letter-spacing:.04em;line-height:1.1}
+.linha__dest{padding:7px 14px;font-weight:900;font-stretch:70%;font-size:1.3rem;letter-spacing:.02em;text-transform:uppercase;line-height:1.1}
+.capa__chamada{margin:22px 0 10px;font-weight:800;font-stretch:78%;font-size:clamp(1.5rem,2.3vw,2.05rem);line-height:1.06;text-wrap:balance}
+.capa__texto{margin:0;max-width:40ch;color:var(--texto-2)}
+.campos{display:grid;grid-template-columns:1fr 1fr;margin:24px 0 0;border-top:1.5px solid var(--preto);border-left:1.5px solid var(--preto);background:rgba(248,189,202,.55)}
+.campos > div{padding:8px 12px 10px;border-right:1.5px solid var(--preto);border-bottom:1.5px solid var(--preto)}
+.campos dt{font-size:.72rem;font-weight:800;font-stretch:80%;letter-spacing:.05em;text-transform:uppercase;color:var(--texto-2)}
+.campos dd{margin:2px 0 0;font-family:var(--f-num);font-weight:700;font-size:.98rem;line-height:1.3}
+
+.janela{position:relative;margin:0;padding:8px 8px 0;background:var(--noite-2);border-radius:6px;box-shadow:inset 0 0 0 2px var(--preto)}
+.janela__tela{position:relative;aspect-ratio:16/9;overflow:hidden;border-radius:3px;background:#070b1d}
+.janela__tela > img,.janela__tela > canvas{position:absolute;inset:0;width:100%;height:100%;image-rendering:pixelated}
+.janela figcaption,.janela__rodape{display:flex;justify-content:space-between;gap:12px;padding:8px 4px 9px;font-family:var(--f-num);font-size:.78rem;color:var(--noite-texto)}
+
+.canhoto{
+  position:relative;
+  display:flex;flex-direction:column;gap:16px;
+  padding:40px 28px 30px;
+  border-left:4px dotted var(--tecido);
+}
+.canhoto::before{content:"";position:absolute;left:-17px;width:30px;height:30px;border-radius:50%;background:var(--tecido-img) var(--tecido) fixed}
+.canhoto::before{top:-15px}
+.rotulo{margin:0;font-size:.74rem;font-weight:800;font-stretch:80%;letter-spacing:.05em;text-transform:uppercase;color:var(--texto-2)}
+.canhoto__titulo{margin:0;font-weight:900;font-stretch:62%;font-size:2.7rem;line-height:.88;text-transform:uppercase}
+.canhoto__preco{margin:0;font-weight:700;font-stretch:85%;font-size:.95rem;color:var(--texto-2)}
+.canhoto__preco strong{display:block;color:var(--preto);font-weight:900;font-stretch:70%;font-size:2.6rem;line-height:1;font-variant-numeric:tabular-nums}
+.canhoto__plataformas{margin:-6px 0 0;font-family:var(--f-num);font-weight:700;font-size:.85rem}
+.canhoto .botao{width:100%}
+.contagem{margin:4px 0 0;padding:9px 12px 10px;border:1.5px solid var(--preto);border-radius:4px}
+.contagem time{display:block;margin-top:2px;font-family:var(--f-num);font-weight:700;font-size:1.65rem;line-height:1;letter-spacing:.03em;font-variant-numeric:tabular-nums}
+.codigo-barras{width:100%;height:44px;color:var(--preto)}
+.canhoto__rodape{display:flex;justify-content:space-between;align-items:center;margin-top:-8px;font-size:.78rem}
+.alvo-carimbo{position:absolute;width:0;height:0;z-index:4}
+.canhoto .alvo-carimbo{left:50%;top:auto;bottom:118px}
+
+/* ---------- carimbos e furos ---------- */
+.carimbo{
+  position:absolute;left:0;top:0;translate:-50% -50%;
+  display:inline-flex;flex-direction:column;align-items:center;gap:3px;
+  padding:9px 16px 8px;
+  color:var(--carimbo);
+  border:3px solid currentColor;border-radius:9px;
+  outline:1.5px solid currentColor;outline-offset:3px;
+  font-family:var(--f-display);font-weight:900;font-stretch:66%;text-transform:uppercase;white-space:nowrap;
+  transform:rotate(var(--rot,-8deg));
+  mix-blend-mode:multiply;
+  -webkit-mask-image:var(--desgaste);mask-image:var(--desgaste);
+  pointer-events:none;
+}
+.carimbo__grande{font-size:1.8rem;line-height:.9;letter-spacing:.03em}
+.carimbo__pequeno{font-family:var(--f-num);font-weight:700;font-size:.72rem;letter-spacing:.04em;font-stretch:100%;text-transform:none}
+.carimbo--novo{animation:carimbar .44s cubic-bezier(.16,.84,.3,1) both}
+@keyframes carimbar{
+  0%{opacity:0;transform:rotate(calc(var(--rot,-8deg) - 7deg)) scale(1.75)}
+  55%{opacity:1;transform:rotate(var(--rot,-8deg)) scale(.93)}
+  100%{opacity:1;transform:rotate(var(--rot,-8deg)) scale(1)}
+}
+.furo{position:absolute;width:22px;height:22px;margin:-11px 0 0 -11px;border-radius:50%;background:var(--fundo-furo,var(--tecido));box-shadow:inset 0 3px 4px rgba(0,0,0,.55);z-index:3;animation:furar .22s cubic-bezier(.3,1.5,.5,1) both}
+.confete{position:absolute;width:22px;height:22px;margin:-11px 0 0 -11px;border-radius:50%;background:var(--bilhete-claro);z-index:5;animation:cair .9s cubic-bezier(.45,0,.85,.55) forwards;pointer-events:none}
+@keyframes furar{from{transform:scale(0)}to{transform:scale(1)}}
+@keyframes cair{to{transform:translate(18px,140px) rotate(220deg) scaleY(.5);opacity:0}}
+
+/* ---------- trailer ---------- */
+.trailer .roseta{width:520px;height:520px;left:-200px;top:-180px}
+.player{position:relative;z-index:1}
+.player .janela{padding:10px 10px 0}
+.player__poster{transition:filter .3s ease-out}
+.player[data-estado="parado"] .player__poster{filter:brightness(.72)}
+.player__play{position:absolute;left:50%;top:50%;translate:-50% -50%;white-space:nowrap;--notch:#2a2440;padding:18px 30px;font-size:1.2rem}
+.player__play small{font-family:var(--f-num);font-weight:700;font-size:.85rem;letter-spacing:.02em;opacity:.8}
+.player__legenda{
+  position:absolute;left:50%;bottom:7%;translate:-50% 0;margin:0;
+  max-width:88%;padding:6px 14px 7px;
+  background:rgba(5,7,18,.82);color:#f4f0e6;
+  font-family:var(--f-pixel);font-size:clamp(.82rem,1.75vw,1.3rem);line-height:1.3;text-align:center;
+}
+.player__fala{
+  position:absolute;left:4%;right:4%;bottom:6%;margin:0;
+  padding:14px 18px 15px;min-height:4.4em;
+  background:#0b1026;color:#f4f0e6;
+  border:3px solid #f4f0e6;box-shadow:0 0 0 3px #0b1026;
+  font-family:var(--f-pixel);font-size:clamp(.85rem,1.9vw,1.4rem);line-height:1.3;
+}
+.player__fala strong{position:absolute;top:-15px;left:16px;padding:2px 10px;background:var(--bilhete);color:var(--preto);font-weight:700;font-size:.78em;text-transform:uppercase;letter-spacing:.04em}
+.player__fim{position:absolute;inset:0;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:12px;text-align:center;color:var(--bilhete);padding:20px}
+.player__fim-titulo{margin:0;font-weight:900;font-stretch:62%;font-size:clamp(2.6rem,9.5vw,7.5rem);line-height:.84;text-transform:uppercase}
+.player__fim-data{margin:0;font-family:var(--f-num);font-weight:700;font-size:clamp(.9rem,1.8vw,1.25rem);color:var(--noite-texto)}
+.player__barra{display:grid;grid-template-columns:auto minmax(0,1fr) auto;align-items:center;gap:18px;margin-top:16px}
+.player__toggle{display:grid;place-items:center;width:50px;height:50px;border:0;border-radius:50%;background:var(--preto);color:var(--bilhete);cursor:pointer;transition:background-color .18s ease-out}
+@media (hover:hover){.player__toggle:hover{background:var(--tinta)}}
+.player__toggle svg{width:20px;height:20px}
+.player__cenas{display:grid;grid-template-columns:repeat(6,minmax(0,1fr));gap:8px;list-style:none;margin:0;padding:0}
+.player__cenas button{
+  display:block;width:100%;padding:0 0 2px;
+  background:none;border:0;cursor:pointer;text-align:left;
+  font:700 .8rem/1.2 var(--f-display);font-stretch:80%;letter-spacing:.05em;text-transform:uppercase;
+  color:var(--texto-2);
+}
+.player__cenas button::before{
+  content:"";display:block;height:6px;margin-bottom:8px;border-radius:3px;
+  background:linear-gradient(var(--preto),var(--preto)) 0 0/var(--p,0%) 100% no-repeat,rgba(21,19,20,.2);
+}
+.player__cenas button:hover,.player__cenas button[aria-current="true"]{color:var(--preto)}
+.player__tempo{font-family:var(--f-num);font-weight:700;font-size:.95rem;font-variant-numeric:tabular-nums;white-space:nowrap}
+.trailer .alvo-carimbo{right:110px;top:96px;left:auto}
+
+/* ---------- itinerário ---------- */
+.itinerario{padding-bottom:clamp(48px,6vw,80px)}
+.itinerario .via__cabeca{margin-bottom:56px}
+.rota{position:relative;z-index:1;display:grid;grid-template-columns:repeat(7,minmax(0,1fr));list-style:none;margin:0;padding:0}
+.rota::before{content:"";position:absolute;left:7%;right:7%;top:41px;height:8px;border-radius:4px;background:var(--preto)}
+.rota li{position:relative;display:flex;flex-direction:column;align-items:center;padding:0 8px;text-align:center}
+.rota__hora{height:26px;font-family:var(--f-num);font-weight:700;font-size:.9rem;font-variant-numeric:tabular-nums}
+.rota__ponto{position:relative;width:32px;height:32px;margin:3px 0 16px;border-radius:50%;background:var(--bilhete-claro);border:6px solid var(--preto)}
+.rota__nome{font-weight:800;font-stretch:80%;font-size:1.05rem;line-height:1.14;text-wrap:balance}
+.rota__fim .rota__ponto{display:grid;place-items:center;width:48px;height:48px;margin:-5px 0 8px;background:var(--preto);border-color:var(--preto);color:var(--bilhete);font-weight:900;font-size:1.5rem;font-stretch:70%}
+.rota__fim .rota__nome{font-weight:900;font-stretch:68%;font-size:1.3rem;text-transform:uppercase}
+
+/* ---------- personagens ---------- */
+.personagens .roseta{width:560px;height:560px;right:-220px;bottom:-200px}
+.passes{position:relative;z-index:1;display:grid;grid-template-columns:repeat(12,minmax(0,1fr));gap:28px}
+.passe{
+  position:relative;overflow:hidden;
+  display:flex;flex-direction:column;
+  background:var(--grao),var(--bilhete-claro);
+  border:2px solid var(--preto);border-radius:14px;
+  box-shadow:0 1px 1px rgba(70,12,30,.3),0 14px 26px -12px rgba(70,12,30,.45);
+}
+.passe--teo{grid-column:span 6;grid-row:span 2}
+.passe--jurema,.passe--cobrador{grid-column:span 6}
+.passe--passageira{grid-column:1/-1}
+.passe__faixa{
+  display:flex;justify-content:space-between;align-items:center;gap:12px;
+  padding:10px 18px;background:var(--cor-faixa,var(--tinta));color:var(--bilhete-claro);
+  font-weight:800;font-stretch:76%;font-size:.82rem;letter-spacing:.05em;text-transform:uppercase;
+}
+.passe__faixa .serial{font-size:.85rem;letter-spacing:.04em}
+.passe--jurema{--cor-faixa:var(--preto)}
+.passe--cobrador{--cor-faixa:var(--noite)}
+.passe--passageira{--cor-faixa:#7d5563}
+.passe__corpo{display:grid;grid-template-columns:auto minmax(0,1fr);gap:20px;padding:20px 22px 22px;flex:1}
+.passe--teo .passe__corpo{grid-template-columns:1fr;gap:22px}
+.passe__foto{width:136px;height:136px;border-radius:8px;border:2px solid var(--preto);background:#2b3566;image-rendering:pixelated}
+.passe--teo .passe__foto{width:100%;height:auto;aspect-ratio:1;max-height:330px;object-fit:contain;background:#2b3566}
+.passe__nome{margin:0;font-weight:900;font-stretch:62%;font-size:2.5rem;line-height:.9;text-transform:uppercase}
+.passe--teo .passe__nome{font-size:3.6rem}
+.passe__papel{margin:6px 0 14px;font-weight:800;font-stretch:84%;color:var(--tinta)}
+.passe__dados{display:grid;grid-template-columns:1fr 1fr;gap:0 18px;margin:0 0 14px}
+.passe__dados > div{padding:6px 0 7px;border-bottom:1.5px dotted rgba(21,19,20,.55)}
+.passe__dados dt{font-size:.72rem;font-weight:800;font-stretch:80%;letter-spacing:.05em;text-transform:uppercase;color:var(--texto-2)}
+.passe__dados dd{margin:1px 0 0;font-family:var(--f-num);font-weight:700;font-size:.95rem;line-height:1.3}
+.passe__bio{margin:0;color:var(--texto-2);max-width:52ch}
+.passe__fala{margin:14px 0 0;font-weight:800;font-stretch:80%;font-size:1.25rem;line-height:1.2}
+.passe .faixa{margin-top:auto}
+.ilegivel{filter:blur(2.6px);opacity:.75;user-select:none}
+.passe--passageira .passe__corpo{grid-template-columns:auto minmax(0,1.1fr) minmax(0,1fr);align-items:start}
+.passe--passageira .passe__foto{width:168px;height:168px;background:#1b1f3d;animation:fantasma 7s steps(1) infinite}
+.passe--passageira .alvo-carimbo{right:170px;bottom:78px;top:auto;left:auto}
+@keyframes fantasma{0%,61%,64%,88%,100%{opacity:1}62%{opacity:.25}63%{opacity:.7}89%{opacity:.45}}
+
+/* ---------- requisitos ---------- */
+.requisitos .roseta{width:480px;height:480px;left:-180px;bottom:-200px}
+.requisitos__grade{position:relative;z-index:1;display:grid;grid-template-columns:minmax(0,1.75fr) minmax(0,1fr);gap:48px;align-items:start}
+.tabela{width:100%;border-collapse:collapse;font-variant-numeric:tabular-nums}
+.tabela th,.tabela td{padding:14px 18px 14px 0;text-align:left;vertical-align:top;border-bottom:1.5px solid var(--preto)}
+.tabela thead th{padding-bottom:10px;border-bottom-width:3px;font-size:.74rem;font-weight:800;font-stretch:80%;letter-spacing:.05em;text-transform:uppercase}
+.tabela tbody th{width:22%;font-size:.82rem;font-weight:800;font-stretch:80%;letter-spacing:.05em;text-transform:uppercase;color:var(--texto-2)}
+.tabela td{font-weight:600;line-height:1.4}
+.requisitos__lado{position:relative;display:grid;gap:22px;padding:24px 24px 104px;border:2px solid var(--preto);border-radius:10px;background:rgba(248,189,202,.6)}
+.requisitos__lado h3{margin:0 0 4px;font-size:.74rem;font-weight:800;font-stretch:80%;letter-spacing:.05em;text-transform:uppercase;color:var(--texto-2)}
+.requisitos__lado p{margin:0;font-weight:600;line-height:1.4}
+.requisitos__lado .alvo-carimbo{right:50%;bottom:52px;left:auto;top:auto}
+
+/* ---------- pré-venda ---------- */
+.pre-venda .roseta{width:560px;height:560px;left:-280px;bottom:-300px}
+.compra{position:relative;z-index:1;display:grid;gap:34px}
+.compra fieldset{margin:0;padding:0;border:0;min-width:0}
+.compra legend{padding:0;margin-bottom:14px;font-weight:800;font-stretch:80%;font-size:.82rem;letter-spacing:.05em;text-transform:uppercase}
+.edicoes__lista{display:grid;grid-template-columns:1fr 1fr;gap:28px}
+.edicao{position:relative;display:block;cursor:pointer}
+.edicao input,.plataformas input{position:absolute;opacity:0;width:1px;height:1px;pointer-events:none}
+.edicao__bilhete{
+  display:grid;grid-template-columns:minmax(0,1fr) 168px;height:100%;
+  background:var(--grao),var(--bilhete-claro);
+  border:2px solid var(--preto);border-radius:12px;overflow:hidden;
+  transition:transform .22s cubic-bezier(.2,.8,.2,1),box-shadow .22s ease-out;
+}
+@media (hover:hover){.edicao:hover .edicao__bilhete{transform:translateY(-3px)}}
+.edicao input:checked + .edicao__bilhete{box-shadow:0 0 0 2px var(--preto),0 18px 30px -14px rgba(70,12,30,.55)}
+.edicao input:focus-visible + .edicao__bilhete{outline:3px solid var(--tinta);outline-offset:5px}
+.edicao__corpo{position:relative;display:flex;flex-direction:column;padding:0 22px 22px}
+.edicao__corpo > .faixa{margin:0 -22px 16px}
+.edicao__nome{margin:0;font-weight:900;font-stretch:62%;font-size:2.4rem;line-height:.9;text-transform:uppercase}
+.edicao__tipo{margin:6px 0 14px;font-weight:800;font-stretch:84%;color:var(--tinta)}
+.edicao__itens{display:grid;gap:8px;margin:0;padding:0;list-style:none}
+.edicao__itens > span{position:relative;display:block;padding-left:24px;line-height:1.35}
+.edicao__itens > span::before{content:"";position:absolute;left:2px;top:.32em;width:11px;height:11px;border-radius:50%;background:var(--bilhete);box-shadow:inset 0 1.5px 2px rgba(0,0,0,.45)}
+.edicao__canhoto{
+  --fundo-furo:var(--bilhete);
+  position:relative;display:flex;flex-direction:column;justify-content:space-between;gap:14px;
+  padding:20px 18px 18px;border-left:4px dotted var(--bilhete);
+}
+.edicao__preco{margin:0;font-weight:700;font-stretch:85%;font-size:.85rem;color:var(--texto-2)}
+.edicao__preco strong{display:block;color:var(--preto);font-weight:900;font-stretch:66%;font-size:2.3rem;line-height:1;font-variant-numeric:tabular-nums}
+.edicao__escolha{display:flex;align-items:center;gap:10px;font-weight:800;font-stretch:78%;text-transform:uppercase;letter-spacing:.04em;font-size:.85rem}
+.edicao__escolha i{display:grid;place-items:center;width:26px;height:26px;border:2.5px solid var(--preto);border-radius:50%;color:var(--bilhete);flex:none}
+.edicao__escolha i svg{width:14px;height:14px;opacity:0}
+.edicao__escolha .sim{display:none}
+.edicao input:checked + .edicao__bilhete .edicao__escolha i{background:var(--preto)}
+.edicao input:checked + .edicao__bilhete .edicao__escolha i svg{opacity:1}
+.edicao input:checked + .edicao__bilhete .edicao__escolha .sim{display:inline}
+.edicao input:checked + .edicao__bilhete .edicao__escolha .nao{display:none}
+.edicao__canhoto .alvo-carimbo{left:30%;top:58%}
+.plataformas__opcoes{display:flex;flex-wrap:wrap;width:max-content;max-width:100%;border:2px solid var(--preto);border-radius:6px;overflow:hidden;background:var(--bilhete-claro)}
+.plataformas label{position:relative;display:block}
+.plataformas span{display:block;padding:13px 22px;border-right:2px solid var(--preto);font-weight:800;font-stretch:78%;font-size:1.02rem;letter-spacing:.04em;text-transform:uppercase;cursor:pointer;transition:background-color .15s ease-out}
+.plataformas label:last-child span{border-right:0}
+@media (hover:hover){.plataformas span:hover{background:#fbd6de}}
+.plataformas input:checked + span{background:var(--preto);color:var(--bilhete)}
+.plataformas input:focus-visible + span{outline:3px solid var(--tinta);outline-offset:-7px}
+.compra__linha{display:flex;flex-wrap:wrap;align-items:flex-end;justify-content:space-between;gap:28px}
+.compra__acao{display:flex;flex-direction:column;align-items:flex-start;gap:10px}
+.botao--grande{min-height:64px;padding:20px 38px;font-size:1.35rem}
+[data-comprar-texto]{display:inline-flex;align-items:center;gap:10px}
+.compra__nota{margin:0;font-size:.9rem;color:var(--texto-2)}
+.compra__status:empty{display:none}
+.compra__status{margin:0;max-width:62ch;font-weight:700;font-size:1.05rem}
+.compra__status button{margin-left:6px;padding:0;background:none;border:0;font:inherit;font-weight:800;text-decoration:underline;text-underline-offset:.22em;cursor:pointer;color:var(--preto)}
+
+/* ---------- fim da linha ---------- */
+.fim{padding-bottom:0}
+.fim__grade{position:relative;z-index:1;display:grid;grid-template-columns:minmax(0,1.3fr) minmax(0,.7fr) minmax(0,.8fr);gap:40px;align-items:start;padding-bottom:44px}
+.fim__titulo{margin:0 0 12px;font-weight:900;font-stretch:62%;font-size:clamp(3rem,6.4vw,5.6rem);line-height:.86;text-transform:uppercase}
+.fim__grade p{margin:0 0 22px;color:var(--texto-2);max-width:40ch}
+.fim__links{display:grid;gap:10px;margin:0;padding:0;list-style:none}
+.fim__links a{font-weight:800;font-stretch:80%;text-transform:uppercase;letter-spacing:.04em;text-decoration:none;border-bottom:1.5px solid transparent}
+@media (hover:hover){.fim__links a:hover{border-bottom-color:currentColor}}
+.estudio{display:flex;align-items:center;gap:12px;margin-bottom:14px}
+.estudio svg{width:44px;height:44px;flex:none}
+.estudio strong{display:block;font-weight:900;font-stretch:66%;font-size:1.5rem;line-height:1;text-transform:uppercase}
+.estudio span{font-size:.85rem;color:var(--texto-2)}
+.fim__aviso{position:relative;z-index:1;margin:0;padding:18px 0 22px;border-top:1.5px solid var(--preto);font-size:.88rem;line-height:1.5;color:var(--texto-2);max-width:none}
+.fim > .faixa{margin:0 calc(var(--gutter) * -1)}
+.fim .alvo-carimbo{right:170px;top:150px;left:auto}
+
+/* ---------- respiro para telas médias ---------- */
+@media (max-width:1100px){
+  .nav__links{gap:18px}
+  .nav__partida{display:none}
+  .capa{grid-template-columns:minmax(0,1fr) 270px}
+  .capa__grade{grid-template-columns:1fr;gap:26px}
+  .passe--teo{grid-column:1/-1;grid-row:auto}
+  .passe--teo .passe__corpo{grid-template-columns:minmax(0,260px) minmax(0,1fr)}
+  .passe--passageira .passe__corpo{grid-template-columns:auto minmax(0,1fr)}
+  .passe--passageira .passe__fala{grid-column:2}
+  .requisitos__grade{grid-template-columns:1fr}
+  .fim__grade{grid-template-columns:1fr 1fr}
+  .fim__grade > :first-child{grid-column:1/-1}
+}
+
+/* ---------- celular ---------- */
+@media (max-width:760px){
+  body{font-size:1rem}
+  .nav{gap:14px;min-height:56px;padding:8px 14px}
+  .nav__links{display:none}
+  .nav .botao{margin-left:auto;padding:10px 16px}
+  .nav .botao .longo{display:none}
+  .nav .botao .curto{display:inline}
+  .bilhete{margin:12px 12px 48px;--raio:10px}
+  /* fundo "fixed" trava a rolagem no Android e não funciona no iPhone */
+  body,.picote i,.canhoto::before,.canhoto::after{background-attachment:scroll}
+  .via{padding:44px 20px}
+  .via__serie{display:none}
+  .picote::before{left:16px;right:16px}
+  .picote i{width:24px;height:24px;top:-12px}
+  .picote i:first-child{left:-12px}
+  .picote i:last-child{right:-12px}
+  .via__cabeca{grid-template-columns:1fr;margin-bottom:30px}
+  .via__cabeca p{justify-self:start}
+  .capa{grid-template-columns:1fr}
+  .capa__corpo{padding:0 20px 34px}
+  .capa__corpo > .faixa{margin:0 -20px 14px}
+  .capa__corpo .roseta{width:420px;height:420px;right:-200px;top:-120px}
+  .capa__topo{font-size:.75rem}
+  .capa__topo span:nth-child(2){display:none}
+  .capa__titulo{font-size:34cqi;line-height:.94;white-space:normal;margin:28px 0 20px}
+  .capa__titulo span{display:block}
+  /* a faixa da linha alargava a coluna e empurrava o texto para fora do bilhete */
+  .capa__grade{grid-template-columns:minmax(0,1fr)}
+  .linha{width:100%}
+  .linha__num,.linha__dest{font-size:1rem}
+  .linha__num,.linha__dest{padding:7px 10px}
+  .linha__dest{flex:1;min-width:0}
+  .campos dd{font-size:.9rem}
+  .canhoto{border-left:0;border-top:4px dotted var(--tecido);padding:34px 20px 26px}
+  .canhoto::before{left:-12px;top:-14px;width:24px;height:24px}
+  .canhoto::after{content:"";position:absolute;right:-12px;top:-14px;width:24px;height:24px;border-radius:50%;background:var(--tecido-img) var(--tecido) fixed}
+  .canhoto .alvo-carimbo{top:auto;bottom:110px}
+  .player__barra{grid-template-columns:auto minmax(0,1fr);gap:12px}
+  .player__tempo{grid-column:1/-1;justify-self:end;margin-top:-6px;font-size:.85rem}
+  .player__cenas{gap:5px}
+  .player__cenas span{display:none}
+  .player__cenas button{padding:12px 0 10px}
+  .player__cenas button::before{margin-bottom:0;height:8px}
+  .player__play{padding:14px 20px;font-size:1rem}
+  .player__play small{display:none}
+  .player__fala{padding:10px 12px 11px;min-height:0;border-width:2px;font-size:.8rem}
+  .player__legenda{font-size:.78rem}
+  .player__fala strong{top:-13px;left:10px}
+  .trailer .alvo-carimbo{right:80px;top:70px}
+  .rota{grid-template-columns:1fr;gap:0}
+  .rota::before{left:13px;right:auto;top:10px;bottom:30px;width:6px;height:auto}
+  .rota li{display:grid;grid-template-columns:32px minmax(0,1fr);column-gap:16px;align-items:center;padding:0 0 18px;text-align:left}
+  .rota__hora{grid-column:2;grid-row:1;height:auto;font-size:.8rem}
+  .rota__ponto{grid-column:1;grid-row:1/3;width:32px;height:32px;margin:0}
+  .rota__nome{grid-column:2;grid-row:2}
+  .rota__fim .rota__ponto{width:32px;height:32px;margin:0;font-size:1.1rem;border-width:0}
+  .passes{grid-template-columns:1fr;gap:22px}
+  .passe--teo,.passe--jurema,.passe--cobrador,.passe--passageira{grid-column:auto}
+  .passe__corpo,.passe--teo .passe__corpo,.passe--passageira .passe__corpo{grid-template-columns:1fr;gap:16px;padding:18px}
+  .passe__foto,.passe--passageira .passe__foto{width:120px;height:120px}
+  .passe--teo .passe__foto{width:100%;max-height:260px}
+  .passe--teo .passe__nome{font-size:3rem}
+  .passe--passageira .passe__fala{grid-column:auto}
+  .passe--passageira .alvo-carimbo{left:calc(100% - 106px);right:auto;top:118px;bottom:auto}
+  .passe--passageira .carimbo__grande{font-size:1.4rem}
+  .roseta{opacity:.24}
+  .pre-venda .roseta{display:none}
+  .passe__faixa{padding:9px 14px;font-size:.74rem}
+  .tabela thead{position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0)}
+  .tabela tr{display:grid;grid-template-columns:1fr 1fr;gap:4px 14px;padding:12px 0;border-bottom:1.5px solid var(--preto)}
+  .tabela th,.tabela td{display:block;padding:0;border:0}
+  .tabela tbody th{grid-column:1/-1;width:auto;margin-bottom:2px}
+  .tabela td::before{content:attr(data-rotulo);display:block;font-size:.72rem;font-weight:800;font-stretch:80%;letter-spacing:.05em;text-transform:uppercase;color:var(--texto-2)}
+  .requisitos__lado{padding:20px 20px 100px}
+  .edicoes__lista{grid-template-columns:1fr;gap:20px}
+  .edicao__bilhete{grid-template-columns:1fr}
+  .edicao__corpo{padding:0 16px 18px}
+  .edicao__corpo > .faixa{margin:0 -16px 14px}
+  .edicao__nome{font-size:2rem}
+  .edicao__canhoto{flex-direction:row;align-items:center;padding:14px 16px;border-left:0;border-top:4px dotted var(--bilhete)}
+  .edicao__canhoto .alvo-carimbo{left:auto;right:150px;top:50%}
+  .edicao__preco strong{font-size:1.9rem}
+  .plataformas__opcoes{display:grid;grid-template-columns:1fr 1fr;width:100%}
+  .plataformas span{text-align:center;padding:13px 10px;border-right:0}
+  .plataformas label:nth-child(odd) span{border-right:2px solid var(--preto)}
+  .plataformas label:nth-child(-n+2) span{border-bottom:2px solid var(--preto)}
+  .botao--grande{width:100%;font-size:1.15rem;padding:18px 20px}
+  .compra__acao{width:100%}
+  .fim__grade{grid-template-columns:1fr;gap:30px}
+  .fim .alvo-carimbo{left:50%;right:auto;top:auto;bottom:300px}
+}
+
+@media (max-width:380px){
+  .linha__num,.linha__dest{font-size:.9rem}
+}
+
+@media (prefers-reduced-motion:reduce){
+  html{scroll-behavior:auto}
+  *,*::before,*::after{animation-duration:.01ms!important;animation-iteration-count:1!important;transition-duration:.01ms!important}
+}
+</style>
+</head>
+<body>
+<a class="pular" href="#conteudo">Pular para o conteúdo</a>
+
+<header class="nav">
+  <a class="nav__marca" href="#inicio">
+    <svg viewBox="0 0 30 21" aria-hidden="true"><path d="M1 1h28v6a3.5 3.5 0 0 0 0 7v6H1v-6a3.5 3.5 0 0 0 0-7z" fill="currentColor"/><path d="M21 3.5v14" stroke="#121834" stroke-width="1.6" stroke-dasharray="1.6 2.2"/></svg>
+    <span>Último Ônibus</span>
+  </a>
+  <nav aria-label="Seções da página">
+    <ul class="nav__links">
+      <li><a href="#trailer">Trailer</a></li>
+      <li><a href="#itinerario">Itinerário</a></li>
+      <li><a href="#personagens">Personagens</a></li>
+      <li><a href="#requisitos">Requisitos</a></li>
+      <li><a href="#pre-venda">Pré-venda</a></li>
+    </ul>
+  </nav>
+  <p class="nav__partida" aria-label="Tempo até a próxima partida da linha 0000"><span>Próxima partida</span><time data-contagem>--:--:--</time></p>
+  <a class="botao botao--claro" href="#pre-venda" data-cta-nav><span class="longo">Comprar passagem</span><span class="curto">Pré-venda</span></a>
+</header>
+
+<div class="bilhete" id="conteudo">
+
+  <!-- capa -->
+  <section class="via capa" id="inicio" aria-labelledby="titulo">
+    <div class="capa__corpo">
+      <div class="faixa" aria-hidden="true"></div>
+      <div class="roseta" data-semente="0000001358" aria-hidden="true"></div>
+      <div class="capa__topo">
+        <span>Viação Terminal Esquecido</span>
+        <span>Bilhete de passagem · vale 1 viagem</span>
+        <span class="serial">Nº 0000 001358</span>
+      </div>
+      <h1 class="capa__titulo" id="titulo"><span>Último</span> <span>Ônibus</span></h1>
+      <div class="capa__grade">
+        <div class="capa__info">
+          <p class="linha"><span class="linha__num">0000-10</span><span class="linha__dest">Terminal Esquecido</span></p>
+          <p class="capa__chamada">Você perdeu o último ônibus. E entrou no errado.</p>
+          <p class="capa__texto">Um mistério em pixel art sobre a linha 0000, que só roda depois da meia-noite e só para onde alguém perdeu alguma coisa.</p>
+          <dl class="campos">
+            <div><dt>Lançamento</dt><dd>13.03.2027</dd></div>
+            <div><dt>Gênero</dt><dd>Mistério, aventura</dd></div>
+            <div><dt>Plataformas</dt><dd>PC, PS5, Xbox, Switch</dd></div>
+            <div><dt>Classificação</dt><dd>12 anos</dd></div>
+          </dl>
+        </div>
+        <figure class="janela">
+          <div class="janela__tela">
+            <img data-cena="capa" width="1024" height="576" alt="Cena do jogo em pixel art: o ônibus da linha 0000 parado num ponto, à noite, debaixo de chuva, com o Téo esperando no ponto." src="data:image/gif;base64,R0lGODlhAQABAAAAACw=">
+            <canvas width="256" height="144" aria-hidden="true" hidden></canvas>
+          </div>
+          <figcaption><span>Cena do jogo</span><span>Ponto 4417 · 23h58</span></figcaption>
+        </figure>
+      </div>
+    </div>
+    <aside class="canhoto" aria-label="Canhoto da pré-venda">
+      <p class="rotulo">Canhoto do passageiro</p>
+      <p class="canhoto__titulo">Pré-venda aberta</p>
+      <p class="canhoto__preco">a partir de <strong>R$ 39,90</strong></p>
+      <p class="canhoto__plataformas">PC · PS5 · Xbox Series · Switch</p>
+      <a class="botao" href="#pre-venda">Comprar passagem</a>
+      <a class="link-seta" href="#trailer">Ver o trailer <svg class="icone" viewBox="0 0 24 24" aria-hidden="true"><path d="M3 12h16M13 5.5l6.5 6.5-6.5 6.5" fill="none" stroke="currentColor" stroke-width="2.4"/></svg></a>
+      <p class="contagem"><span class="rotulo">Partida à meia-noite. Faltam</span><time data-contagem>--:--:--</time></p>
+      <svg class="codigo-barras" data-codigo="0000001358" aria-hidden="true"></svg>
+      <p class="canhoto__rodape"><span class="serial">Nº 0000 001358</span><span class="rotulo">1ª via</span></p>
+      <div class="alvo-carimbo" data-carimbo-alvo data-rot="-12" data-furo="104,-30"></div>
+    </aside>
+  </section>
+
+  <div class="picote" aria-hidden="true"><i></i><i></i></div>
+
+  <!-- trailer -->
+  <section class="via trailer" id="trailer" aria-labelledby="trailer-titulo">
+    <div class="roseta" data-semente="0000002117" aria-hidden="true"></div>
+    <p class="via__serie serial" aria-hidden="true">Nº 0000 002117 · 2ª via · trailer</p>
+    <div class="via__cabeca">
+      <h2 id="trailer-titulo">Trailer</h2>
+      <p>Trinta segundos da primeira noite na linha 0000. Cenas do jogo, sem som, com legenda.</p>
+    </div>
+    <div class="player" data-player data-estado="parado">
+      <div class="janela">
+        <div class="janela__tela">
+          <img class="player__poster" width="1024" height="576" alt="O Cobrador atrás da catraca do ônibus, com os olhos acesos no escuro." src="data:image/gif;base64,R0lGODlhAQABAAAAACw=">
+          <canvas class="player__canvas" width="256" height="144" hidden aria-hidden="true"></canvas>
+          <p class="player__legenda" hidden></p>
+          <p class="player__fala" hidden><strong></strong><span></span></p>
+          <div class="player__fim" hidden>
+            <p class="player__fim-titulo">Último Ônibus</p>
+            <p class="player__fim-data">13.03.2027 · pré-venda aberta</p>
+          </div>
+          <button class="botao botao--claro player__play" type="button">
+            <svg class="icone" viewBox="0 0 24 24" aria-hidden="true"><path d="M6 3.5v17L20 12z" fill="currentColor"/></svg>
+            Assistir trailer <small>0:32</small>
+          </button>
+        </div>
+        <div class="janela__rodape"><span>Trailer oficial</span><span>Legendado · sem som</span></div>
+      </div>
+      <div class="player__barra">
+        <button class="player__toggle" type="button" aria-label="Assistir trailer"></button>
+        <ol class="player__cenas"></ol>
+        <span class="player__tempo" aria-live="off">0:00 / 0:32</span>
+      </div>
+    </div>
+    <div class="alvo-carimbo" data-carimbo-trailer data-rot="9"></div>
+  </section>
+
+  <div class="picote" aria-hidden="true"><i></i><i></i></div>
+
+  <!-- itinerário -->
+  <section class="via itinerario" id="itinerario" aria-labelledby="itinerario-titulo">
+    <p class="via__serie serial" aria-hidden="true">Nº 0000 003064 · 3ª via · itinerário</p>
+    <div class="via__cabeca">
+      <h2 id="itinerario-titulo">Itinerário</h2>
+      <p>Sete paradas, sete capítulos. Em cada uma, alguém perdeu alguma coisa, e o Cobrador sabe exatamente o quê.</p>
+    </div>
+    <ol class="rota">
+      <li><span class="rota__hora">00:04</span><span class="rota__ponto" aria-hidden="true"></span><span class="rota__nome">Praça dos Guarda-chuvas Esquecidos</span></li>
+      <li><span class="rota__hora">00:13</span><span class="rota__ponto" aria-hidden="true"></span><span class="rota__nome">Rua das Chaves Perdidas</span></li>
+      <li><span class="rota__hora">00:27</span><span class="rota__ponto" aria-hidden="true"></span><span class="rota__nome">Viaduto do Primeiro Amor</span></li>
+      <li><span class="rota__hora">00:41</span><span class="rota__ponto" aria-hidden="true"></span><span class="rota__nome">Escola da Prova que Ninguém Fez</span></li>
+      <li><span class="rota__hora">00:58</span><span class="rota__ponto" aria-hidden="true"></span><span class="rota__nome">Largo do Cachorro que Fugiu</span></li>
+      <li><span class="rota__hora">01:16</span><span class="rota__ponto" aria-hidden="true"></span><span class="rota__nome">Avenida das Promessas</span></li>
+      <li class="rota__fim"><span class="rota__hora">??:??</span><span class="rota__ponto" aria-hidden="true">?</span><span class="rota__nome">Terminal Esquecido</span></li>
+    </ol>
+  </section>
+
+  <div class="picote" aria-hidden="true"><i></i><i></i></div>
+
+  <!-- personagens -->
+  <section class="via personagens" id="personagens" aria-labelledby="personagens-titulo">
+    <div class="roseta" data-semente="0000004409" aria-hidden="true"></div>
+    <p class="via__serie serial" aria-hidden="true">Nº 0000 004409 · 4ª via · passageiros</p>
+    <div class="via__cabeca">
+      <h2 id="personagens-titulo">Personagens</h2>
+      <p>Quatro pessoas na mesma linha, depois da meia-noite. Nenhuma delas está ali por acaso.</p>
+    </div>
+    <div class="passes">
+      <article class="passe passe--teo" aria-labelledby="p-teo">
+        <div class="passe__faixa"><span>Passe escolar</span><span class="serial">Nº 17-04417</span></div>
+        <div class="passe__corpo">
+          <img class="passe__foto" data-retrato="teo" width="256" height="256" alt="Retrato em pixel art do Téo: 17 anos, cabelo crespo, moletom verde." src="data:image/gif;base64,R0lGODlhAQABAAAAACw=">
+          <div>
+            <h3 class="passe__nome" id="p-teo">Téo</h3>
+            <p class="passe__papel">Protagonista. Você joga com ele.</p>
+            <dl class="passe__dados">
+              <div><dt>Idade</dt><dd>17 anos</dd></div>
+              <div><dt>Embarque</dt><dd>23h58 · Ponto 4417</dd></div>
+              <div><dt>Destino</dt><dd>Casa (ele acha)</dd></div>
+              <div><dt>Tarifa</dt><dd>Ainda não pagou</dd></div>
+            </dl>
+            <p class="passe__bio">Perdeu o último ônibus por quarenta segundos e entrou no primeiro que parou. Agora precisa lembrar o que esqueceu antes de chegar ao Terminal.</p>
+            <p class="passe__fala">“Era pra ser só um atalho.”</p>
+          </div>
+        </div>
+        <div class="faixa" aria-hidden="true"></div>
+      </article>
+
+      <article class="passe passe--jurema" aria-labelledby="p-jurema">
+        <div class="passe__faixa"><span>Credencial de motorista</span><span class="serial">Nº 30-00001</span></div>
+        <div class="passe__corpo">
+          <img class="passe__foto" data-retrato="jurema" width="256" height="256" alt="Retrato em pixel art da Dona Jurema: 62 anos, cabelo grisalho preso, óculos e camisa azul de motorista." src="data:image/gif;base64,R0lGODlhAQABAAAAACw=">
+          <div>
+            <h3 class="passe__nome" id="p-jurema">Dona Jurema</h3>
+            <p class="passe__papel">A motorista</p>
+            <dl class="passe__dados">
+              <div><dt>Idade</dt><dd>62 anos</dd></div>
+              <div><dt>Na linha</dt><dd>Há 30 anos</dd></div>
+              <div><dt>Tarifa</dt><dd>Isenta</dd></div>
+              <div><dt>Destino</dt><dd>Fim da linha</dd></div>
+            </dl>
+            <p class="passe__bio">Conhece todas as paradas da cidade, até as que não estão no mapa. Não gosta de atraso nem de pergunta.</p>
+            <p class="passe__fala">“Sobe, menino. Essa linha não volta.”</p>
+          </div>
+        </div>
+      </article>
+
+      <article class="passe passe--cobrador" aria-labelledby="p-cobrador">
+        <div class="passe__faixa"><span>Credencial de cobrador</span><span class="serial">Nº ??-?????</span></div>
+        <div class="passe__corpo">
+          <img class="passe__foto" data-retrato="cobrador" width="256" height="256" alt="Retrato em pixel art do Cobrador: quepe escuro, rosto na sombra e dois olhos amarelos acesos." src="data:image/gif;base64,R0lGODlhAQABAAAAACw=">
+          <div>
+            <h3 class="passe__nome" id="p-cobrador">O Cobrador</h3>
+            <p class="passe__papel">Cuida da catraca</p>
+            <dl class="passe__dados">
+              <div><dt>Idade</dt><dd>Ninguém sabe</dd></div>
+              <div><dt>Cobra</dt><dd>Uma lembrança</dd></div>
+              <div><dt>Turno</dt><dd>00h às 05h</dd></div>
+              <div><dt>Ferramenta</dt><dd>Picotador antigo</dd></div>
+            </dl>
+            <p class="passe__bio">Fica na catraca furando bilhetes. Cada furo guarda uma memória de quem passou, e ele nunca devolve.</p>
+            <p class="passe__fala">“Aqui ninguém paga com dinheiro.”</p>
+          </div>
+        </div>
+      </article>
+
+      <article class="passe passe--passageira" aria-labelledby="p-passageira">
+        <div class="passe__faixa"><span>Passe ilegível</span><span class="serial">Nº 13-?????</span></div>
+        <div class="passe__corpo">
+          <img class="passe__foto" data-retrato="passageira" width="256" height="256" alt="Retrato em pixel art da Passageira do Banco 13: capa de chuva amarela, cabelo escuro cobrindo metade do rosto." src="data:image/gif;base64,R0lGODlhAQABAAAAACw=">
+          <div>
+            <h3 class="passe__nome" id="p-passageira">A Passageira do Banco 13</h3>
+            <p class="passe__papel">Passageira</p>
+            <dl class="passe__dados">
+              <div><dt>Embarque</dt><dd><span class="ilegivel" aria-hidden="true">23h13 · Ponto 0013</span><span class="sr-only">ilegível</span></dd></div>
+              <div><dt>Destino</dt><dd><span class="ilegivel" aria-hidden="true">Rua da Consolação</span><span class="sr-only">ilegível</span></dd></div>
+              <div><dt>Assento</dt><dd>13, janela</dd></div>
+              <div><dt>Frequência</dt><dd>Toda noite</dd></div>
+            </dl>
+            <p class="passe__bio">Senta sempre no mesmo lugar, encostada na janela. Ninguém lembra de ter visto ela entrar.</p>
+          </div>
+          <p class="passe__fala">“Você também esqueceu alguma coisa?”</p>
+        </div>
+        <div class="alvo-carimbo" data-carimbo-fixo="Nunca desceu|todas as noites" data-rot="-7"></div>
+      </article>
+    </div>
+  </section>
+
+  <div class="picote" aria-hidden="true"><i></i><i></i></div>
+
+  <!-- requisitos -->
+  <section class="via requisitos" id="requisitos" aria-labelledby="requisitos-titulo">
+    <div class="roseta" data-semente="0000005252" aria-hidden="true"></div>
+    <p class="via__serie serial" aria-hidden="true">Nº 0000 005252 · 5ª via · condições de embarque</p>
+    <div class="via__cabeca">
+      <h2 id="requisitos-titulo">Requisitos do sistema</h2>
+      <p>As condições de embarque no PC. No PS5, Xbox Series e Switch, é só baixar e jogar.</p>
+    </div>
+    <div class="requisitos__grade">
+      <table class="tabela">
+        <caption class="sr-only">Requisitos mínimos e recomendados para jogar no PC</caption>
+        <thead>
+          <tr><th scope="col">Item</th><th scope="col">Mínimo</th><th scope="col">Recomendado</th></tr>
+        </thead>
+        <tbody>
+          <tr><th scope="row">Sistema</th><td data-rotulo="Mínimo">Windows 10 (64 bits)</td><td data-rotulo="Recomendado">Windows 11 (64 bits)</td></tr>
+          <tr><th scope="row">Processador</th><td data-rotulo="Mínimo">Intel Core i3-6100 ou AMD Ryzen 3 1200</td><td data-rotulo="Recomendado">Intel Core i5-8400 ou AMD Ryzen 5 2600</td></tr>
+          <tr><th scope="row">Memória</th><td data-rotulo="Mínimo">4 GB de RAM</td><td data-rotulo="Recomendado">8 GB de RAM</td></tr>
+          <tr><th scope="row">Placa de vídeo</th><td data-rotulo="Mínimo">Intel UHD 620 (integrada)</td><td data-rotulo="Recomendado">NVIDIA GTX 1050 ou AMD RX 560</td></tr>
+          <tr><th scope="row">DirectX</th><td data-rotulo="Mínimo">Versão 11</td><td data-rotulo="Recomendado">Versão 12</td></tr>
+          <tr><th scope="row">Armazenamento</th><td data-rotulo="Mínimo">3 GB livres</td><td data-rotulo="Recomendado">3 GB livres em SSD</td></tr>
+          <tr><th scope="row">Desempenho</th><td data-rotulo="Mínimo">720p a 30 fps</td><td data-rotulo="Recomendado">1080p a 60 fps</td></tr>
+        </tbody>
+      </table>
+      <aside class="requisitos__lado" aria-label="Outras informações">
+        <div><h3>Plataformas</h3><p>PC (Windows), PlayStation 5, Xbox Series X|S e Nintendo Switch</p></div>
+        <div><h3>Idiomas</h3><p>Português do Brasil (vozes e textos), inglês e espanhol (textos)</p></div>
+        <div><h3>Controles</h3><p>Teclado e mouse ou controle</p></div>
+        <div><h3>Duração</h3><p>Cerca de 8 horas, em 7 capítulos</p></div>
+        <div class="alvo-carimbo" data-carimbo-fixo="Conferido|roda até no PC da escola" data-rot="-9"></div>
+      </aside>
+    </div>
+  </section>
+
+  <div class="picote" aria-hidden="true"><i></i><i></i></div>
+
+  <!-- pré-venda -->
+  <section class="via pre-venda" id="pre-venda" aria-labelledby="pre-venda-titulo">
+    <div class="roseta" data-semente="0000006630" aria-hidden="true"></div>
+    <p class="via__serie serial" aria-hidden="true">Nº 0000 006630 · 6ª via · pré-venda</p>
+    <div class="via__cabeca">
+      <h2 id="pre-venda-titulo">Pré-venda</h2>
+      <p>Garanta sua passagem para 13.03.2027. Quem compra agora leva o moletom da linha 0000 para o Téo.</p>
+    </div>
+    <form class="compra" data-compra novalidate>
+      <fieldset class="edicoes">
+        <legend>1. Escolha a passagem</legend>
+        <div class="edicoes__lista">
+          <label class="edicao">
+            <input type="radio" name="edicao" value="Passagem comum" data-preco="R$ 39,90" checked>
+            <span class="edicao__bilhete">
+              <span class="edicao__corpo">
+                <span class="faixa" aria-hidden="true"></span>
+                <span class="edicao__nome">Passagem comum</span>
+                <span class="edicao__tipo">Edição padrão</span>
+                <span class="edicao__itens" role="list">
+                  <span role="listitem" class="li">O jogo completo, com as 7 paradas</span>
+                  <span role="listitem" class="li">Moletom da linha 0000 para o Téo (bônus de pré-venda)</span>
+                </span>
+              </span>
+              <span class="edicao__canhoto">
+                <span class="edicao__preco">por <strong>R$ 39,90</strong></span>
+                <span class="edicao__escolha"><i><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4.5 12.5l5 5L19.5 7" fill="none" stroke="currentColor" stroke-width="3.2"/></svg></i><span class="nao">Escolher</span><span class="sim">Escolhida</span></span>
+                <span class="alvo-carimbo" data-alvo-edicao data-rot="-14"></span>
+              </span>
+            </span>
+          </label>
+          <label class="edicao">
+            <input type="radio" name="edicao" value="Passe colecionador" data-preco="R$ 69,90">
+            <span class="edicao__bilhete">
+              <span class="edicao__corpo">
+                <span class="faixa" aria-hidden="true"></span>
+                <span class="edicao__nome">Passe colecionador</span>
+                <span class="edicao__tipo">Edição colecionador</span>
+                <span class="edicao__itens" role="list">
+                  <span role="listitem" class="li">Tudo da passagem comum</span>
+                  <span role="listitem" class="li">Trilha sonora “Rádio da Madrugada”, 14 faixas</span>
+                  <span role="listitem" class="li">Artbook digital “Caderno do Cobrador”</span>
+                  <span role="listitem" class="li">Parada extra: “Volta pra Casa”, capítulo bônus</span>
+                </span>
+              </span>
+              <span class="edicao__canhoto">
+                <span class="edicao__preco">por <strong>R$ 69,90</strong></span>
+                <span class="edicao__escolha"><i><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4.5 12.5l5 5L19.5 7" fill="none" stroke="currentColor" stroke-width="3.2"/></svg></i><span class="nao">Escolher</span><span class="sim">Escolhida</span></span>
+                <span class="alvo-carimbo" data-alvo-edicao data-rot="-14"></span>
+              </span>
+            </span>
+          </label>
+        </div>
+      </fieldset>
+      <div class="compra__linha">
+        <fieldset class="plataformas">
+          <legend>2. Plataforma</legend>
+          <div class="plataformas__opcoes">
+            <label><input type="radio" name="plataforma" value="PC" checked><span>PC</span></label>
+            <label><input type="radio" name="plataforma" value="PS5"><span>PS5</span></label>
+            <label><input type="radio" name="plataforma" value="Xbox Series"><span>Xbox Series</span></label>
+            <label><input type="radio" name="plataforma" value="Switch"><span>Switch</span></label>
+          </div>
+        </fieldset>
+        <div class="compra__acao">
+          <button class="botao botao--grande" type="submit" data-comprar><span data-comprar-texto>Comprar passagem · R$ 39,90</span></button>
+          <p class="compra__nota">Projeto acadêmico: nenhum valor é cobrado de verdade.</p>
+        </div>
+      </div>
+      <p class="compra__status" role="status" aria-live="polite"></p>
+    </form>
+  </section>
+
+  <div class="picote" aria-hidden="true"><i></i><i></i></div>
+
+  <!-- fim da linha -->
+  <footer class="via fim" aria-labelledby="fim-titulo">
+    <div class="fim__grade">
+      <div>
+        <h2 class="fim__titulo" id="fim-titulo">Fim da linha.</h2>
+        <p>Último Ônibus chega em 13.03.2027 para PC, PS5, Xbox Series e Nintendo Switch. A linha 0000 parte toda noite à meia-noite.</p>
+        <a class="botao" href="#pre-venda">Comprar passagem</a>
+      </div>
+      <nav aria-label="Rodapé">
+        <ul class="fim__links">
+          <li><a href="#trailer">Trailer</a></li>
+          <li><a href="#itinerario">Itinerário</a></li>
+          <li><a href="#personagens">Personagens</a></li>
+          <li><a href="#requisitos">Requisitos</a></li>
+          <li><a href="#pre-venda">Pré-venda</a></li>
+          <li><a href="#inicio">Voltar ao começo da linha</a></li>
+        </ul>
+      </nav>
+      <div>
+        <div class="estudio">
+          <svg viewBox="0 0 44 44" aria-hidden="true"><circle cx="22" cy="22" r="20" fill="#151314"/><g stroke="#F49DB0" stroke-width="3.4" stroke-linecap="round"><path d="M22 22V8"/><path d="M22 22l12.1 7"/><path d="M22 22L9.9 29"/></g><circle cx="22" cy="22" r="4.5" fill="#F49DB0"/></svg>
+          <div><strong>Estúdio Catraca</strong><span>São Paulo, SP</span></div>
+        </div>
+        <svg class="codigo-barras" data-codigo="0000009999" aria-hidden="true"></svg>
+        <p class="serial" style="margin:8px 0 0;font-size:.8rem">Nº 0000 009999 · última via</p>
+      </div>
+    </div>
+    <p class="fim__aviso">Último Ônibus, a Viação Terminal Esquecido e o Estúdio Catraca são fictícios, criados para uma atividade acadêmica de design de landing page. Preços, datas, edições e requisitos fazem parte da ficção, e nenhuma compra é real. A pixel art, o trailer e o guilhochê do bilhete foram desenhados em código para esta página.</p>
+    <div class="faixa" aria-hidden="true"></div>
+    <div class="alvo-carimbo" data-carimbo-alvo data-rot="8"></div>
+  </footer>
+</div>
+
+<script>
+(function(){
+'use strict';
+var $=function(s,c){return (c||document).querySelector(s)};
+var $$=function(s,c){return Array.prototype.slice.call((c||document).querySelectorAll(s))};
+var reduzir=window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+/* ---------- utilidades ---------- */
+function rng(seed){var a=seed>>>0;return function(){a=(a+0x6D2B79F5)|0;var t=Math.imul(a^(a>>>15),1|a);t=(t+Math.imul(t^(t>>>7),61|t))^t;return((t^(t>>>14))>>>0)/4294967296;};}
+function hash(s){var h=2166136261>>>0;for(var i=0;i<s.length;i++){h^=s.charCodeAt(i);h=Math.imul(h,16777619)>>>0;}return h;}
+function svgURL(svg){return 'url("data:image/svg+xml,'+encodeURIComponent(svg)+'")';}
+function dois(n){return String(n).padStart(2,'0');}
+function dataHora(d){d=d||new Date();return dois(d.getDate())+'.'+dois(d.getMonth()+1)+'.'+d.getFullYear()+' · '+dois(d.getHours())+':'+dois(d.getMinutes());}
+
+/* ---------- papel: tecido do banco, guilhochê, código de barras ---------- */
+function tecido(){
+  var r=rng(42),S=150,cores=['#26346c','#352866','#1d4656','#4a3826','#2b3a76','#3a2a5a'];
+  var s="<svg xmlns='http://www.w3.org/2000/svg' width='"+S+"' height='"+S+"'><rect width='"+S+"' height='"+S+"' fill='#141a38'/>";
+  for(var i=0;i<30;i++){
+    var x=r()*S,y=r()*S,c=cores[i%cores.length],rot=Math.round(r()*360),tipo=r(),forma;
+    if(tipo<.34)forma="<path d='M0 0q4-6 8 0t8 0t8 0' fill='none' stroke='"+c+"' stroke-width='2.4' stroke-linecap='round' transform='rotate("+rot+")'/>";
+    else if(tipo<.58)forma="<path d='M0 0l6-10 6 10z' fill='"+c+"' transform='rotate("+rot+")'/>";
+    else if(tipo<.8)forma="<circle r='"+(2+r()*2.6).toFixed(1)+"' fill='"+c+"'/>";
+    else forma="<rect width='11' height='3' fill='"+c+"' transform='rotate("+rot+")'/>";
+    for(var ox=-S;ox<=S;ox+=S)for(var oy=-S;oy<=S;oy+=S)s+="<g transform='translate("+(x+ox).toFixed(1)+" "+(y+oy).toFixed(1)+")'>"+forma+"</g>";
+  }
+  return s+'</svg>';
+}
+function faixaTile(){
+  var P=36,A=22,g='';
+  for(var i=0;i<6;i++){var d='';for(var x=0;x<=P;x++){var y=A/2+7*Math.sin(2*Math.PI*x/P+i*Math.PI/3);d+=(x?'L':'M')+x+' '+y.toFixed(2);}g+="<path d='"+d+"'/>";}
+  return "<svg xmlns='http://www.w3.org/2000/svg' width='"+P+"' height='"+A+"'><g fill='none' stroke='#0E4D4A' stroke-width='.95'>"+g+"</g></svg>";
+}
+function roseta(semente){
+  var r=rng(semente),S=200,c=S/2;
+  var n=10+2*Math.floor(r()*7),m=n+(r()<.5?-3:3),fase=.25+r()*.5,n2=5+Math.floor(r()*5);
+  function anel(base,amp,freq,desloc,P){var s='';for(var i=0;i<=P;i++){var th=i/P*Math.PI*2,rho=base+amp*Math.sin(freq*th+desloc);s+=(i?'L':'M')+(c+rho*Math.cos(th)).toFixed(1)+' '+(c+rho*Math.sin(th)).toFixed(1);}return s+'Z';}
+  var d='';
+  for(var k=0;k<9;k++){d+=anel(44+k*5.1,5.6,n,k*fase,180);d+=anel(44+k*5.1,5.6,m,-k*fase,180);}
+  for(var j=0;j<6;j++)d+=anel(12+j*3.4,8.5,n2,j*.6,140);
+  d+=anel(94,2.3,n*3,0,420)+anel(97,2.3,n*3,Math.PI,420);
+  return '<svg viewBox="0 0 '+S+' '+S+'" xmlns="http://www.w3.org/2000/svg" focusable="false"><path d="'+d+'" fill="none" stroke="currentColor" stroke-width=".32"/></svg>';
+}
+function codigoBarras(el){
+  var txt=el.getAttribute('data-codigo'),x=0,h='',seq=[[1,1],[1,1]];
+  for(var i=0;i<txt.length;i++){var v=parseInt(txt[i],10)||0;seq.push([1+(v%3),1+((v+1)%2)],[1+((v>>1)%2),1+(v%2)],[1+((v*7)%3),1]);}
+  seq.push([1,1],[2,1],[1,0]);
+  seq.forEach(function(p){h+='<rect x="'+x+'" y="0" width="'+p[0]+'" height="40" fill="currentColor"/>';x+=p[0]+p[1];});
+  el.setAttribute('viewBox','0 0 '+x+' 40');el.setAttribute('preserveAspectRatio','none');el.innerHTML=h;
+}
+
+/* ---------- pixel art ---------- */
+function tela(w,h){var c=document.createElement('canvas');c.width=w;c.height=h;var x=c.getContext('2d');x.imageSmoothingEnabled=false;return [c,x];}
+function R(x,a,b,w,h,cor){x.fillStyle=cor;x.fillRect(Math.round(a),Math.round(b),Math.round(w),Math.round(h));}
+function circ(x,cx,cy,r,cor){x.fillStyle=cor;for(var dy=-r;dy<=r;dy++){var dx=Math.floor(Math.sqrt(r*r-dy*dy)+.35);x.fillRect(Math.round(cx-dx),Math.round(cy+dy),dx*2+1,1);}}
+function poli(x,pts,cor){x.fillStyle=cor;x.beginPath();x.moveTo(pts[0],pts[1]);for(var i=2;i<pts.length;i+=2)x.lineTo(pts[i],pts[i+1]);x.closePath();x.fill();}
+function pinta(x,img,a,b,esc,alpha){esc=esc||1;x.globalAlpha=alpha==null?1:alpha;x.drawImage(img,Math.round(a),Math.round(b),img.width*esc,img.height*esc);x.globalAlpha=1;}
+function ampliar(c,k){var o=tela(c.width*k,c.height*k);o[1].drawImage(c,0,0,o[0].width,o[0].height);return o[0].toDataURL('image/png');}
+function sprite(linhas,pal,contorno){
+  var w=0;linhas.forEach(function(l){w=Math.max(w,l.length);});
+  var p=contorno?1:0,t=tela(w+p*2,linhas.length+p*2),c=t[0],x=t[1];
+  linhas.forEach(function(l,y){for(var i=0;i<l.length;i++){var cor=pal[l[i]];if(cor){x.fillStyle=cor;x.fillRect(i+p,y+p,1,1);}}});
+  if(contorno){
+    var img=x.getImageData(0,0,c.width,c.height),d=img.data,cw=c.width,ch=c.height,marcar=[];
+    var op=function(i,j){return i>=0&&j>=0&&i<cw&&j<ch&&d[(j*cw+i)*4+3]>0;};
+    for(var j=0;j<ch;j++)for(var i=0;i<cw;i++)if(!op(i,j)&&(op(i-1,j)||op(i+1,j)||op(i,j-1)||op(i,j+1)))marcar.push([i,j]);
+    x.fillStyle=contorno;marcar.forEach(function(q){x.fillRect(q[0],q[1],1,1);});
+  }
+  return c;
+}
+var FONTE={'0':['111','101','101','101','111'],'1':['010','110','010','010','111'],'2':['111','001','111','100','111'],'3':['111','001','111','001','111'],'4':['101','101','111','001','001'],'5':['111','100','111','001','111'],'6':['111','100','111','101','111'],'7':['111','001','010','010','010'],'8':['111','101','111','101','111'],'9':['111','101','111','001','111']};
+function texto3x5(x,s,px,py,cor){x.fillStyle=cor;var cx=px;for(var k=0;k<s.length;k++){var g=FONTE[s[k]];if(!g){cx+=2;continue;}for(var ry=0;ry<5;ry++)for(var rx=0;rx<3;rx++)if(g[ry][rx]==='1')x.fillRect(cx+rx,py+ry,1,1);cx+=4;}}
+
+var PAL_TEO={H:'#1d1512',h:'#3a2a22',S:'#8a5a3c',s:'#6b432c',e:'#120e1a',w:'#efe8dc',m:'#4a2a20',T:'#2f8f86',t:'#1f6560',d:'#e8e4dc',J:'#2c3e70',j:'#1f2c52',W:'#e8e4dc'};
+var PAL_JUR={G:'#c3bfcb',g:'#8f8a99',S:'#c68a5e',s:'#a2683f',o:'#2a2a35',l:'#dfe8f2',e:'#1a1420',m:'#8a3a32',C:'#9cc3e0',c:'#7aa0bf',N:'#1f2c52',Y:'#d9a02b',k:'#141418'};
+var PAL_COB={P:'#1b2238',p:'#2c3658',b:'#c9a13b',d:'#0c0e17',D:'#161a2a',Y:'#f6d36b',U:'#2a3352',u:'#1c2340',w:'#d8d6cf',x:'#0b0b10',k:'#0b0b10'};
+var PAL_PAS={h:'#241d33',j:'#3b3152',P:'#dcd6e6',p:'#b7aec9',q:'#b7aec9',e:'#1a1426',m:'#8f6d86',R:'#d9b84a',r:'#a88a2a',H:'#8a6d1e',b:'#7a6420',k:'#141418'};
+
+var CORPO={
+  teo:['....HHHH....','..HHHhHHHH..','.HHHHHHHHhH.','.HHSSSSSSHH.','.HSSSSSSSSH.','..SeSSSSeS..','..SSSSSSSS..','...SSmmSS...','....ssss....','..TTTTTTTT..','.TTTTddTTTT.','TTtTTdTdTtTT','TTtTTTTTTtTT','TTtTTTTTTtTT','TTtTTTTTTtTT','SStTTTTTTtSS','S.tTTTTTTt.S','..JJJJJJJJ..','..JJJJJJJJ..','..JJJ..JJJ..','..JJJ..JJJ..','..JJJ..JJJ..','..jjj..jjj..','..jjj..jjj..','.WWWW..WWWW.','.WWWW..WWWW.'],
+  teoCorre:['....HHHH....','..HHHhHHHH..','.HHHHHHHHhH.','.HHSSSSSSHH.','.HSSSSSSSSH.','..SeSSSSeS..','..SSSSSSSS..','...SSmmSS...','....ssss....','..TTTTTTTT..','.TTTTddTTTT.','TTtTTdTdTtTT','TTtTTTTTTtTT','TTtTTTTTTtTT','TTtTTTTTTtTT','SStTTTTTTtSS','..tTTTTTTt.S','..JJJJJJJJ..','..JJJJJJJJ..','.JJJJ..JJJ..','JJJJ....JJJ.','JJJ......JJ.','jj.......jj.','jj........jj','WWW.......WW','WW........WW'],
+  jurema:['.....GG.....','....GGGG....','..GGGGGGGG..','.GGGgGGGGGG.','.GSSSSSSSSG.','..SooSSooS..','..SSSSSSSS..','...SSmmSS...','....ssss....','..CCCNNCCC..','.CCCCNNCCCC.','CCcCCNNCCcCC','CCcCCNNCCcCC','CCcCYCCCCcCC','CCcCCCCCCcCC','SScCCCCCCcSS','S.NNNNNNNN.S','..NNNNNNNN..','..NNNNNNNN..','..NNN..NNN..','..NNN..NNN..','..SSS..SSS..','..sss..sss..','..kkk..kkk..','.kkkk..kkkk.'],
+  cobrador:['...PPPPPP...','..PPPPPPPP..','..PPPbbPPP..','.pppppppppp.','..dddddddd..','..dYddddYd..','..dddddddd..','...dddddd...','....wddw....','..UUUwwUUU..','.UUUUddUUUU.','UUuUUddUUuUU','UUuUbUUUUuUU','UUuUUUUUUuUU','UUuUUUUUUuUU','dduUUUUUUudd','d.uUUUUUUu.d','..UUUUUUUU..','..UUUUUUUU..','..UUU..UUU..','..UUU..UUU..','..UUU..UUU..','..uuu..uuu..','..uuu..uuu..','.kkkk..kkkk.','.kkkk..kkkk.'],
+  passageira:['....hhhh....','..hhhhhhhh..','.hhhjhhhhhh.','.hhhPPPPPhh.','.hhhPPPPPPh.','.hhhhPPePPh.','.hhhhPPPPPh.','.hhhhhPmPPh.','.hhhhhpppph.','.hhRRRRRRhh.','.RRRRRRRRRR.','RRrRRRRRRrRR','RRrRRbRRRrRR','RRrRRRRRRrRR','RRrRRbRRRrRR','PPrRRRRRRrPP','P.rRRRRRRr.P','..RRRRRRRR..','..RRRRRRRR..','..rrrrrrrr..','...PP..PP...','...PP..PP...','...pp..pp...','..kkk..kkk..']
+};
+var RETRATO={
+  teo:{pal:PAL_TEO,fundo:['#2b3566','#2b3566'],l:['........................','.........HHHHHH.........','......HHHHHHHHHHHH......','.....HHHhHHHHHhHHHH.....','....HHHHHHHhHHHHHHHH....','....HhHHHHHHHHHHhHHH....','...HHHHHHHHHHHHHHHHHH...','...HHHHSSSSSSSSSSHHHH...','...HHHSSSSSSSSSSSSHHH...','...HHSSSSSSSSSSSSSSHH...','....SSHHHSSSSSSHHHSS....','....SSSweSSSSSSewSSS....','...sSSSSSSSSSSSSSSSSs...','...sSSSSSSSssSSSSSSSs...','....SSSSSSSssSSSSSSS....','.....SSSSSSSSSSSSSS.....','.....SSSSSmmmmSSSSS.....','......SSSSSSSSSSSS......','.......ssSSSSSSss.......','........ssssssss........','.....TTTTtsssstTTTTT....','...TTTTTTTTdTTdTTTTTTT..','..TTTTTTTTTdTTdTTTTTTTT.','..TTTTTTTTTTTTTTTTTTTTT.']},
+  jurema:{pal:PAL_JUR,fundo:['#2b3566','#2b3566'],l:['..........GGGG..........','.........GGgGGG.........','.........GGGGgG.........','.......GGGGGGGGGG.......','.....GGGGGgGGGGGGGG.....','....GGGGGGGGGGGGgGGG....','....GGGgGGGGGGGGGGGG....','...GGGGSSSSSSSSSSGGGG...','...GGGSSSSSSSSSSSSGGG...','...GGSSSSSSSSSSSSSSGG...','....SSggggSSSSggggSS....','....SoooooSSSSoooooS....','....SoleloSooSoleloS....','....SoooooSSSSoooooS....','...sSSSSSSSssSSSSSSSs...','....SSSSSSSssSSSSSSS....','.....SSSSSSSSSSSSSS.....','.....SSSSSmmmmSSSSS.....','......SSSSSSSSSSSS......','.......ssSSSSSSss.......','.....CCCCCssssCCCCC.....','...CCCCCCCCNNCCCCCCCC...','..CCCCYCCCCNNCCCCCCCCC..','..CCcCCCCCCNNCCCCCCcCC..']},
+  cobrador:{pal:PAL_COB,fundo:['#26305e','#1f2750'],l:['........................','........................','.......PPPPPPPPPP.......','......PPPPPPPPPPPP......','.....PPPPPpbbpPPPPP.....','.....PPPPPPbbPPPPPP.....','.....PPPPPPPPPPPPPP.....','...pppppppppppppppppp...','...PPPPPPPPPPPPPPPPPP...','.....dddddddddddddd.....','.....dddddddddddddd.....','.....ddYYddddddYYdd.....','.....dddddddddddddd.....','.....DddddddddddddD.....','......DddddddddddD......','.......DDddddddDD.......','........DDDDDDDD........','.........dddddd.........','......wwwdxxxxdwww......','....UUUwwwxxxxwwwUUU....','...UUUUUUwxxxxwUUUUUU...','..UUUbUUUUxxxxUUUUUUUU..','..UUbbbUUUxxxxUUUUUUuU..','..UUUbUUUUUxxUUUUUUUuU..']},
+  passageira:{pal:PAL_PAS,fundo:['#20254a','#1b1f3d'],l:['........RRRRRRRR........','......RRRRRRRRRRRR......','.....RRRhhhhhhhhRRR.....','....RRhhhhhhhhhhhhRR....','....RhhhhhjhhhhhhhhR....','...RRhhhhjhhhhhhhhhRR...','...RhhhhjhhPPPPPhhhhR...','...RhhhjhhPPPPPPPhhhR...','...RhhhjhhPPPPPPPPhhR...','...RhhhhhhPPqPPPPPhhR...','...RhhhhhhPPPPeePPhhR...','...RhhhhhhPPPPPPPPhhR...','...RhhhhhhhPPPqPPPhhR...','...RhhhhhhhPPPPPPhhhR...','...RhhhhhhhhPPmmPhhhR...','...RrhhhhhhhPPPPPhhhrR..','...RrhhhhhhhhqqqhhhhrR..','..RRrhhhhhhhhhhhhhhhrRR.','..RRRrhhhhhhhhhhhhhrRRR.','.RRRRRrrhhhhhhhhhrrRRRR.','.RRRRRRRRRHHHHHRRRRRRRR.','RRRRRRRRRRRHHHRRRRRRRRRR','RRRRRRRRRRRRHRRRRRRRRRRR','RRRRRRRRRRRRRRRRRRRRRRRR']}
+};
+function retrato(nome){
+  var d=RETRATO[nome],t=tela(32,32),c=t[0],x=t[1];
+  R(x,0,0,32,16,d.fundo[0]);R(x,0,16,32,16,d.fundo[1]);
+  for(var i=0;i<32;i+=2){R(x,i,15,1,1,d.fundo[1]);R(x,i+1,16,1,1,d.fundo[0]);}
+  pinta(x,sprite(d.l,d.pal),4,8);
+  return ampliar(c,8);
+}
+
+/* ---------- cenário ---------- */
+var W=256,H=144,SP={},CAM={};
+function predios(larg,semente,cor,alt,base,dens,coresJ){
+  var t=tela(larg,H),c=t[0],x=t[1],r=rng(semente),px=0;
+  while(px<larg){
+    var w=12+Math.floor(r()*24),h=alt*.45+Math.floor(r()*alt),topo=base-h;
+    R(x,px,topo,w,H-topo,cor);
+    if(r()<.35)R(x,px+Math.floor(w/2),topo-7,1,7,cor);
+    if(r()<.3)R(x,px+2,topo-4,7,4,cor);
+    for(var wy=topo+3;wy<base-3;wy+=5)for(var wx=px+2;wx<px+w-2;wx+=4)if(r()<dens)R(x,wx,wy,2,2,coresJ[Math.floor(r()*coresJ.length)]);
+    px+=w+(r()<.25?1+Math.floor(r()*3):0);
+  }
+  return c;
+}
+function prepararCenario(){
+  var t=tela(W,H),x=t[1],f=['#060a1b','#080d22','#0a1029','#0d1430','#111938','#151e41','#19244b'],bh=H/f.length;
+  f.forEach(function(cor,i){R(x,0,i*bh,W,bh+1,cor);});
+  for(var i=1;i<f.length;i++){var y=Math.round(i*bh);for(var px=0;px<W;px+=2){R(x,px,y-1,1,1,f[i]);R(x,px+1,y,1,1,f[i-1]);}}
+  var r=rng(5);for(var k=0;k<46;k++)R(x,Math.floor(r()*W),Math.floor(r()*70),1,1,r()<.25?'#f9cbd5':'#7d88bb');
+  circ(x,214,24,7,'#f3ead8');circ(x,217,22,6,'#080d22');
+  CAM.ceu=t[0];
+  CAM.longe=predios(768,11,'#19224b',70,100,.06,['#3a4680','#2f3a70']);
+  CAM.perto=predios(768,23,'#0e1330',46,104,.22,['#f3d58a','#f3d58a','#f3d58a','#9fc4e8','#F49DB0']);
+  SP.teo=sprite(CORPO.teo,PAL_TEO,'#090b16');
+  SP.teoCorre=sprite(CORPO.teoCorre,PAL_TEO,'#090b16');
+  SP.jurema=sprite(CORPO.jurema,PAL_JUR,'#090b16');
+  SP.cobrador=sprite(CORPO.cobrador,PAL_COB,'#04050a');
+  SP.passageira=sprite(CORPO.passageira,PAL_PAS,'#090b16');
+}
+function laco(x,img,off,dy){var w=img.width,o=((off%w)+w)%w;x.drawImage(img,-Math.round(o),dy);x.drawImage(img,w-Math.round(o),dy);}
+function rua(x,off1,off2){
+  x.drawImage(CAM.ceu,0,0);laco(x,CAM.longe,off1||0,-4);laco(x,CAM.perto,off2||0,0);
+  R(x,0,104,W,8,'#2a2c43');R(x,0,104,W,1,'#3c3f5f');R(x,0,112,W,3,'#4a4d6b');R(x,0,115,W,29,'#171926');
+  for(var i=6;i<W;i+=28)R(x,i,130,14,2,'#33354b');
+}
+function poste(x,px,aceso){
+  R(x,px,36,2,68,'#2b2e47');R(x,px,36,13,2,'#2b2e47');R(x,px+9,38,7,2,aceso?'#fff1b8':'#4a4636');
+  if(aceso){
+    poli(x,[px+9,40,px+16,40,px+46,112,px-22,112],'rgba(255,214,130,.09)');
+    x.fillStyle='rgba(255,214,130,.10)';x.fillRect(px-22,104,68,8);
+    x.fillStyle='rgba(255,214,130,.07)';x.fillRect(px+4,115,16,29);
+  }
+}
+function ponto(x,px){
+  R(x,px+8,68,46,3,'#3d4163');R(x,px+10,71,1,33,'#3d4163');R(x,px+51,71,1,33,'#3d4163');
+  x.fillStyle='rgba(120,140,190,.12)';x.fillRect(px+12,72,38,20);
+  R(x,px+16,75,11,15,'#F49DB0');R(x,px+17,77,9,2,'#151314');R(x,px+17,81,7,1,'#151314');R(x,px+17,83,8,1,'#151314');R(x,px+17,86,5,1,'#151314');
+  R(x,px+12,92,38,2,'#4b4f73');R(x,px+14,94,1,10,'#3d4163');R(x,px+47,94,1,10,'#3d4163');
+  R(x,px,58,2,46,'#8a8fa8');R(x,px-5,51,12,10,'#e9e6ef');R(x,px-4,52,10,8,'#1f2c52');
+  R(x,px-2,54,6,3,'#e9e6ef');R(x,px-2,57,1,1,'#e9e6ef');R(x,px+3,57,1,1,'#e9e6ef');
+}
+function roda(x,cx,cy){circ(x,cx,cy,6,'#121216');circ(x,cx,cy,3,'#6b6f7e');R(x,cx,cy,1,1,'#121216');}
+function onibus(x,bx,by,o){
+  o=o||{};var L=124,A=40,corpo=o.corpo||'#d9d6cc',sombra=o.sombra||'#a19d93',luz=o.luz||'#c6dcb0';
+  x.fillStyle='rgba(0,0,0,.38)';x.fillRect(bx+4,by+A,L-6,3);
+  if(o.farol!==false)poli(x,[bx+L,by+A-13,bx+L+70,by+A-22,bx+L+70,by+A+4],'rgba(255,240,180,.09)');
+  R(x,bx+2,by,L-4,1,corpo);R(x,bx+1,by+1,L-2,1,corpo);R(x,bx,by+2,L,A-6,corpo);
+  R(x,bx+30,by-3,28,3,sombra);
+  var wy=by+6,wh=13,k=0;
+  R(x,bx+3,wy-1,L-24,wh+2,'#5d5a54');
+  for(var wx=bx+4;wx<bx+L-24;wx+=16){
+    R(x,wx,wy,14,wh,luz);R(x,wx,wy,14,2,'#e4f0d2');
+    if(o.passageiros&&o.passageiros.indexOf(k)>-1){R(x,wx+5,wy+5,5,5,'#56634f');R(x,wx+4,wy+10,7,3,'#56634f');}
+    if(o.fantasma===k){x.globalAlpha=o.alfaFantasma==null?1:o.alfaFantasma;R(x,wx+5,wy+3,5,7,'#2a2238');R(x,wx+6,wy+5,3,4,'#cfc8dc');R(x,wx+4,wy+10,7,3,'#d9b84a');x.globalAlpha=1;}
+    k++;
+  }
+  R(x,bx+40,wy+2,12,27,'#5d5a54');R(x,bx+41,wy+3,4,25,luz);R(x,bx+47,wy+3,4,25,luz);
+  R(x,bx+L-36,wy+2,12,27,'#5d5a54');R(x,bx+L-35,wy+3,4,25,luz);R(x,bx+L-29,wy+3,4,25,luz);
+  R(x,bx+L-19,by+1,18,8,'#14110e');texto3x5(x,o.numero||'0000',bx+L-17,by+2,o.led||'#ffb21f');
+  R(x,bx+L-17,wy+3,15,17,'#a7c294');R(x,bx+L-17,wy+3,15,2,'#d7e8c4');
+  R(x,bx,by+A-18,L,3,o.faixa||'#F49DB0');R(x,bx,by+A-15,L,1,'#1f2c52');
+  R(x,bx,by+A-10,L,4,sombra);
+  R(x,bx+L-2,by+A-14,2,3,'#fff2b0');R(x,bx,by+A-15,2,4,'#e0402c');
+  roda(x,bx+24,by+A-4);roda(x,bx+L-26,by+A-4);
+}
+function chuva(x,t,n,sem,cor){
+  var r=rng(sem||3);x.fillStyle=cor||'rgba(170,190,240,.45)';
+  for(var i=0;i<n;i++){
+    var sx=r()*300,sy=r()*H,v=150+r()*90,yy=(sy+t*v)%H,xx=((sx-t*v*.3)%300+300)%300-22;
+    for(var k=0;k<4;k++)x.fillRect(Math.round(xx-k*.3),Math.round(yy+k),1,1);
+  }
+}
+function interior(x,off,o){
+  o=o||{};R(x,0,0,W,H,'#232850');
+  var wy=22,wh=48;
+  for(var i=0;i<4;i++){
+    var wx=10+i*62;
+    x.save();x.beginPath();x.rect(wx,wy,52,wh);x.clip();
+    x.drawImage(CAM.ceu,0,-30);laco(x,CAM.longe,off*.35,-40);laco(x,CAM.perto,off,-38);
+    if(o.chuva)chuva(x,off/40,90,21,'rgba(190,205,245,.5)');
+    x.restore();
+    R(x,wx-3,wy-3,58,3,'#363d6b');R(x,wx-3,wy+wh,58,4,'#363d6b');R(x,wx-3,wy,3,wh,'#363d6b');R(x,wx+52,wy,3,wh,'#363d6b');
+    x.fillStyle='rgba(233,243,214,.07)';x.fillRect(wx+5,wy,7,wh);
+  }
+  R(x,0,0,W,13,'#191d40');R(x,18,5,220,3,'#e8f2d4');x.fillStyle='rgba(232,242,212,.07)';x.fillRect(0,8,W,40);
+  R(x,0,15,W,2,'#d6a838');[40,128,216].forEach(function(px){R(x,px,17,2,105,'#d6a838');});
+  R(x,0,74,W,48,'#1d2246');R(x,0,74,W,1,'#2c3263');
+  R(x,0,122,W,22,'#373045');for(var j=0;j<W;j+=6)R(x,j,124,1,20,'#2f2a3c');
+}
+function banco(x,bx,by,sem){
+  R(x,bx+1,by-1,20,1,'#2d2160');R(x,bx,by,22,26,'#2d2160');
+  var r=rng(sem),cores=['#e0b43a','#2f8f86','#F49DB0','#7fb0dd','#6c4fc0'];
+  for(var i=0;i<42;i++){x.fillStyle=cores[Math.floor(r()*cores.length)];x.fillRect(bx+1+Math.floor(r()*20),by+1+Math.floor(r()*24),r()<.5?1:2,1);}
+  R(x,bx+4,by-3,14,2,'#c9ced8');R(x,bx-2,by+26,26,5,'#2d2160');R(x,bx-2,by+31,2,10,'#585e78');R(x,bx+22,by+31,2,10,'#585e78');
+}
+function q12(t){return Math.floor(t*12)/12;}
+
+/* cenas do trailer */
+function cena1(x,t){
+  var q=q12(t);rua(x,0,0);poste(x,30,true);ponto(x,178);
+  var bx=96+q*18+q*q*22;
+  onibus(x,bx,83,{corpo:'#cfd6e4',sombra:'#8e97ab',faixa:'#3a64b0',led:'#ffe08a',numero:'8012',passageiros:[0,2,3]});
+  var tx=-16+Math.min(q,3.4)*52,img=(q<3.4&&Math.floor(q*8)%2)?SP.teoCorre:SP.teo;
+  pinta(x,img,tx,80);chuva(x,q,40,7);
+}
+function cena2(x,t){
+  var q=q12(t),pisca=q>.8&&q<2.4&&(Math.floor(q*9)%3===0);
+  rua(x,0,0);poste(x,30,!pisca);ponto(x,178);
+  var p=Math.max(0,Math.min(1,(q-1.6)/3)),e=1-Math.pow(1-p,3),bx=-140+e*186;
+  if(q>1.4)onibus(x,bx,83,{fantasma:4,passageiros:[],led:(q>4.8&&Math.floor(q*4)%2)?'#ffd36b':'#ffb21f'});
+  pinta(x,SP.teo,192,80);chuva(x,q,70,9);
+}
+function cena3(x,t){
+  var q=q12(t);interior(x,q*60);
+  R(x,150,56,44,66,'#151830');R(x,152,54,40,2,'#151830');
+  pinta(x,SP.jurema,151,38,3);
+  x.lineWidth=4;x.strokeStyle='#15151c';x.beginPath();x.arc(150,100,19,0,Math.PI*2);x.stroke();
+  x.lineWidth=2;x.beginPath();x.moveTo(131,100);x.lineTo(169,100);x.stroke();
+  R(x,0,112,W,32,'#121527');R(x,0,112,W,1,'#2a2f52');
+  R(x,24,120,6,3,'#ffb21f');R(x,36,120,6,3,'#5cd18a');R(x,48,120,10,3,'#9fc4e8');
+  if(Math.floor(q*2)%2)R(x,64,120,3,3,'#e0402c');
+}
+function catraca(x,q){
+  R(x,52,80,42,6,'#b7bdcb');R(x,56,86,34,40,'#8d94a5');R(x,58,88,30,36,'#7c8394');
+  R(x,60,90,26,9,'#f1efe8');texto3x5(x,q>3.2?'004418':'004417',61,92,'#151314');
+  var giro=q>3.2&&q<3.7?.9:0,cx=94,cy=106;
+  x.lineWidth=3;x.strokeStyle='#cfd4de';x.lineCap='square';
+  for(var i=0;i<3;i++){var a=giro+i*Math.PI*2/3;x.beginPath();x.moveTo(cx,cy);x.lineTo(cx+Math.cos(a)*22,cy+Math.sin(a)*12);x.stroke();}
+  circ(x,cx,cy,3,'#e9ecf2');
+}
+function cena4(x,t){
+  var q=q12(t);interior(x,q*40);
+  pinta(x,SP.cobrador,150,28,3);
+  if(Math.floor(q*3)%7===6){R(x,162,46,4,4,'#0c0e17');R(x,177,46,4,4,'#0c0e17');}
+  R(x,126,98,104,5,'#7b8194');R(x,126,103,104,41,'#454b63');R(x,132,108,92,2,'#5a6079');
+  R(x,198,92,11,4,'#c9ced8');R(x,206,89,3,3,'#c9ced8');
+  catraca(x,q);
+}
+function cena5(x,t){
+  var q=q12(t);interior(x,q*50,{chuva:true});
+  R(x,141,4,24,11,'#e9e6ef');texto3x5(x,'13',148,7,'#151314');
+  banco(x,96,80,3);banco(x,206,80,8);banco(x,150,78,13);
+  var a=(Math.floor(q*10)%11===0||Math.floor(q*7)%13===0)?.25:(.78+.22*Math.sin(q*3)),g=Math.floor(q*10)%17===0?3:0;
+  pinta(x,SP.passageira,148+g,32,3,a);
+  R(x,146,104,30,6,'#2d2160');R(x,146,110,30,12,'#241a4e');
+}
+function cena6(x,t){
+  var q=q12(t);x.drawImage(CAM.ceu,0,0);laco(x,CAM.longe,q*8,-4);laco(x,CAM.perto,q*20,0);
+  R(x,0,104,W,40,'#0d0f1c');
+  var bx=118+q*12;R(x,bx,116,12,6,'#cfd6e4');R(x,bx,119,2,2,'#e0402c');R(x,bx+10,119,2,2,'#e0402c');
+  x.fillStyle='rgba(6,8,20,.6)';x.fillRect(0,0,W,H);
+}
+function cenaCapa(x,t){
+  var q=Math.floor(t*10)/10,pisca=Math.floor(q*10)%47===0||(q%9>8.4&&Math.floor(q*20)%2===0);
+  rua(x,0,0);poste(x,24,!pisca);ponto(x,178);
+  onibus(x,42,83,{fantasma:4,alfaFantasma:(Math.floor(q*10)%23===0)?.3:1,led:Math.floor(q*1.5)%2?'#ffb21f':'#ffc94a',passageiros:[]});
+  x.fillStyle='rgba(198,220,176,.06)';x.fillRect(46,118,112,22);
+  x.fillStyle='rgba(255,178,31,.12)';x.fillRect(150,120,18,14);
+  pinta(x,SP.teo,192,80);chuva(x,q,72,11);
+}
+
+var CENAS=[
+  {nome:'23h58',dur:5,desenha:cena1,legenda:'23h58. O último ônibus passou quarenta segundos antes.'},
+  {nome:'A linha 0000',dur:6,desenha:cena2,legenda:'Mas ainda tinha mais um.'},
+  {nome:'Dona Jurema',dur:5.5,desenha:cena3,fala:['Dona Jurema','Sobe, menino. Essa linha não volta pra trás.']},
+  {nome:'O Cobrador',dur:6,desenha:cena4,fala:['O Cobrador','Aqui ninguém paga com dinheiro. A passagem é uma lembrança.']},
+  {nome:'Banco 13',dur:5,desenha:cena5,legenda:'Banco 13. Ela pega essa linha toda noite. Nunca desceu.'},
+  {nome:'13.03.2027',dur:5,desenha:cena6,final:true}
+];
+var ICONE={
+  play:'<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M6 3.5v17L20 12z" fill="currentColor"/></svg>',
+  pausa:'<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M5.5 3.5h5v17h-5zM13.5 3.5h5v17h-5z" fill="currentColor"/></svg>',
+  denovo:'<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 4.5V1L6.5 6 12 11V7.5a5 5 0 1 1-5 5H4a8 8 0 1 0 8-8z" fill="currentColor"/></svg>',
+  ok:'<svg class="icone" viewBox="0 0 24 24" aria-hidden="true"><path d="M4.5 12.5l5 5L19.5 7" fill="none" stroke="currentColor" stroke-width="3"/></svg>'
+};
+
+/* ---------- carimbo e furo ---------- */
+function carimbar(alvo,grande,pequeno,animar){
+  if(!alvo)return;
+  var velho=alvo.querySelector('.carimbo');if(velho)velho.remove();
+  var el=document.createElement('span');
+  el.className='carimbo'+(animar&&!reduzir?' carimbo--novo':'');
+  el.style.setProperty('--rot',(alvo.getAttribute('data-rot')||-8)+'deg');
+  el.innerHTML='<span class="carimbo__grande">'+grande+'</span><span class="carimbo__pequeno">'+pequeno+'</span>';
+  alvo.appendChild(el);
+}
+function furar(alvo,dx,dy){
+  if(!alvo)return;
+  var f=document.createElement('span');f.className='furo';f.style.left=dx+'px';f.style.top=dy+'px';
+  alvo.appendChild(f);
+  if(!reduzir){var c=document.createElement('span');c.className='confete';c.style.left=dx+'px';c.style.top=dy+'px';alvo.appendChild(c);setTimeout(function(){c.remove();},1000);}
+}
+
+/* ---------- relógio da meia-noite ---------- */
+function relogio(){
+  var agora=new Date(),meia=new Date(agora);meia.setHours(24,0,0,0);
+  var s=Math.max(0,Math.floor((meia-agora)/1000)),txt=dois(Math.floor(s/3600))+':'+dois(Math.floor(s/60)%60)+':'+dois(s%60);
+  $$('[data-contagem]').forEach(function(e){e.textContent=txt;e.setAttribute('datetime','PT'+Math.floor(s/3600)+'H'+(Math.floor(s/60)%60)+'M'+(s%60)+'S');});
+}
+
+/* ---------- capa animada ---------- */
+function iniciarCapa(){
+  var img=$('[data-cena="capa"]'),t=tela(W,H);cenaCapa(t[1],1.2);img.src=ampliar(t[0],4);
+  if(reduzir)return;
+  var cv=$('.capa canvas'),cx=cv.getContext('2d'),visivel=true,t0=performance.now(),ult=0;
+  cx.imageSmoothingEnabled=false;
+  function loop(ts){if(!visivel)return;if(ts-ult>83){ult=ts;cenaCapa(cx,(ts-t0)/1000);cv.hidden=false;}requestAnimationFrame(loop);}
+  if('IntersectionObserver' in window)new IntersectionObserver(function(es){var v=es[0].isIntersecting;if(v&&!visivel){visivel=true;requestAnimationFrame(loop);}visivel=v;}).observe(cv);
+  requestAnimationFrame(loop);
+}
+
+/* ---------- trailer ---------- */
+function fmt(s){s=Math.floor(s);return Math.floor(s/60)+':'+dois(s%60);}
+function iniciarPlayer(){
+  var raiz=$('[data-player]');if(!raiz)return;
+  var canvas=$('canvas',raiz),ctx=canvas.getContext('2d'),poster=$('.player__poster',raiz),play=$('.player__play',raiz),
+      toggle=$('.player__toggle',raiz),legenda=$('.player__legenda',raiz),fala=$('.player__fala',raiz),
+      falaNome=$('strong',fala),falaTexto=$('span',fala),fim=$('.player__fim',raiz),tempo=$('.player__tempo',raiz),lista=$('.player__cenas',raiz);
+  ctx.imageSmoothingEnabled=false;
+  var pt=tela(W,H);cena4(pt[1],1.4);poster.src=ampliar(pt[0],4);
+  var inicios=[],acc=0;CENAS.forEach(function(c){inicios.push(acc);acc+=c.dur;});var TOTAL=acc;
+  lista.innerHTML=CENAS.map(function(c,i){return '<li><button type="button" aria-label="Cena '+(i+1)+': '+c.nome+'"><span>'+c.nome+'</span></button></li>';}).join('');
+  var segs=$$('button',lista),t=0,tocando=false,ult=0,atual=-1,acabou=false;
+  toggle.innerHTML=ICONE.play;
+  function onde(tt){for(var k=0;k<CENAS.length;k++)if(tt<inicios[k]+CENAS[k].dur)return [k,tt-inicios[k]];return [CENAS.length-1,CENAS[CENAS.length-1].dur-.001];}
+  function render(){
+    var o=onde(t),i=o[0],lt=o[1],c=CENAS[i];
+    c.desenha(ctx,lt);
+    if(i!==atual){atual=i;segs.forEach(function(b,k){b.setAttribute('aria-current',k===i?'true':'false');});}
+    if(c.legenda){legenda.hidden=false;legenda.textContent=c.legenda;}else legenda.hidden=true;
+    if(c.fala){fala.hidden=false;falaNome.textContent=c.fala[0];falaTexto.textContent=c.fala[1].slice(0,Math.max(0,Math.floor((lt-.4)*30)));}else fala.hidden=true;
+    fim.hidden=!c.final;if(c.final)fim.style.opacity=Math.min(1,lt/.8);
+    segs.forEach(function(b,k){b.style.setProperty('--p',(k<i?100:k>i?0:lt/CENAS[k].dur*100).toFixed(1)+'%');});
+    tempo.textContent=fmt(t)+' / '+fmt(TOTAL);
+  }
+  function quadro(ts){
+    if(!tocando)return;
+    t+=Math.min(.25,(ts-ult)/1000);ult=ts;
+    if(t>=TOTAL){t=TOTAL-.001;render();terminar();return;}
+    render();requestAnimationFrame(quadro);
+  }
+  function mostrarTela(){poster.hidden=true;canvas.hidden=false;play.hidden=true;}
+  function tocar(){
+    if(acabou){t=0;acabou=false;}
+    mostrarTela();tocando=true;raiz.setAttribute('data-estado','tocando');
+    toggle.innerHTML=ICONE.pausa;toggle.setAttribute('aria-label','Pausar trailer');
+    ult=performance.now();requestAnimationFrame(quadro);
+  }
+  function pausar(){tocando=false;raiz.setAttribute('data-estado','pausado');toggle.innerHTML=ICONE.play;toggle.setAttribute('aria-label','Continuar trailer');}
+  function terminar(){
+    tocando=false;acabou=true;raiz.setAttribute('data-estado','fim');
+    toggle.innerHTML=ICONE.denovo;toggle.setAttribute('aria-label','Assistir de novo');
+    carimbar($('[data-carimbo-trailer]'),'Assistido',dataHora().split(' · ')[0],true);
+  }
+  play.addEventListener('click',tocar);
+  toggle.addEventListener('click',function(){tocando?pausar():tocar();});
+  segs.forEach(function(b,k){b.addEventListener('click',function(){t=inicios[k]+.001;acabou=false;mostrarTela();render();if(!tocando)tocar();});});
+  if('IntersectionObserver' in window)new IntersectionObserver(function(es){if(!es[0].isIntersecting&&tocando)pausar();},{threshold:.2}).observe(raiz);
+}
+
+/* ---------- pré-venda: validar a passagem ---------- */
+function iniciarCompra(){
+  var form=$('[data-compra]');if(!form)return;
+  var btn=$('[data-comprar]',form),txt=$('[data-comprar-texto]',form),status=$('.compra__status',form),nav=$('[data-cta-nav]'),validado=false;
+  function preco(){return form.querySelector('input[name="edicao"]:checked').getAttribute('data-preco');}
+  function rotulo(){txt.textContent='Comprar passagem · '+preco();}
+  $$('input[name="edicao"]',form).forEach(function(i){i.addEventListener('change',function(){if(!validado)rotulo();});});
+  form.addEventListener('submit',function(e){
+    e.preventDefault();if(validado||btn.getAttribute('data-estado')==='carregando')return;
+    btn.setAttribute('data-estado','carregando');btn.setAttribute('aria-busy','true');txt.textContent='Validando passagem…';
+    setTimeout(validar,reduzir?0:650);
+  });
+  function validar(){
+    validado=true;
+    var ed=form.querySelector('input[name="edicao"]:checked'),plat=form.querySelector('input[name="plataforma"]:checked').value,quando=dataHora();
+    var alvoEd=ed.closest('.edicao').querySelector('[data-alvo-edicao]');
+    var canhoto=alvoEd.parentNode;furar(canhoto,canhoto.clientWidth-28,28);
+    var alvos=[alvoEd].concat($$('[data-carimbo-alvo]'));
+    alvos.forEach(function(a,i){setTimeout(function(){carimbar(a,'Validado',quando.split(' · ')[0]+' · '+plat,true);var f=a.getAttribute('data-furo');if(f){var p=f.split(',');furar(a,+p[0],+p[1]);}},reduzir?0:140+i*160);});
+    btn.removeAttribute('aria-busy');btn.setAttribute('data-estado','validado');btn.disabled=true;
+    txt.innerHTML=ICONE.ok+' Passagem validada';
+    nav.innerHTML='<span class="longo">Passagem validada</span><span class="curto">Validada</span>';
+    status.innerHTML='Pronto: '+ed.value.toLowerCase()+' para '+plat+', válida para 13.03.2027. Ninguém foi cobrado, porque isto é um projeto acadêmico. <button type="button">Desfazer</button>';
+    $('button',status).addEventListener('click',desfazer);
+    canhoto.setAttribute('data-validado','');
+  }
+  function desfazer(){
+    validado=false;
+    $$('.carimbo',document).forEach(function(c){var a=c.parentNode;if(a.hasAttribute('data-carimbo-alvo')||a.hasAttribute('data-alvo-edicao'))c.remove();});
+    $$('.furo').forEach(function(f){f.remove();});
+    btn.disabled=false;btn.removeAttribute('data-estado');rotulo();
+    nav.innerHTML='<span class="longo">Comprar passagem</span><span class="curto">Pré-venda</span>';
+    status.textContent='Passagem desfeita. Pode escolher de novo.';
+    btn.focus();
+  }
+}
+
+/* ---------- montar tudo ---------- */
+var raiz=document.documentElement;
+raiz.style.setProperty('--tecido-img',svgURL(tecido()));
+raiz.style.setProperty('--guilhoche-faixa',svgURL(faixaTile()));
+$$('.roseta').forEach(function(el){el.innerHTML=roseta(hash(el.getAttribute('data-semente')));});
+$$('.codigo-barras').forEach(codigoBarras);
+$$('[data-carimbo-fixo]').forEach(function(a){var p=a.getAttribute('data-carimbo-fixo').split('|');carimbar(a,p[0],p[1],false);});
+prepararCenario();
+$$('[data-retrato]').forEach(function(img){img.src=retrato(img.getAttribute('data-retrato'));});
+iniciarCapa();
+iniciarPlayer();
+iniciarCompra();
+relogio();setInterval(relogio,1000);
+})();
+</script>
+</body>
+</html>
